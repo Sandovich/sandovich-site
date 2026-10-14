@@ -1,10 +1,15 @@
 // SANDÓVICH — поведение сайта (без библиотек)
 
 // Ссылки на Золотое Яблоко: заполнить, когда появятся карточки товаров.
-// Пока пусто — кнопки ведут на общий поиск ЗЯ по бренду.
-const ZYA_SEARCH = 'https://goldapple.ru/catalogsearch/result?q=sandovich';
+// Без артикула кнопка ведёт в каталог бренда в ЗЯ.
+const ZYA_SEARCH = 'https://goldapple.ru/volosy/aksessuary/rascheski?brandobjectid=1913789';
 const ZYA_LINKS = {
-  HBSG01: '', HBSS01: '', HBSB01: '', HBSR01: '', HBSR02: '', HBSP02: '',
+  HBSG01: 'https://goldapple.ru/99000205592-sandovich-01',
+  HBSS01: 'https://goldapple.ru/99000205595-sandovich-01',
+  HBSB01: 'https://goldapple.ru/99000205593-sandovich-01',
+  HBSR01: 'https://goldapple.ru/99000205594-sandovich-01',
+  HBSR02: 'https://goldapple.ru/99000205596-sandovich-02',
+  HBSP02: 'https://goldapple.ru/99000205591-02',
 };
 const SKU_ART = {
   '01-gold': 'HBSG01', '01-silver': 'HBSS01', '01-bronze': 'HBSB01',
