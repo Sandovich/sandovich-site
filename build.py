@@ -199,7 +199,7 @@ def product(sku):
     
     <div class="tiles">{tiles}</div>
     <a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a>
-    <p class="pnote">Артикул {art} · доставка и самовывоз — через Золотое Яблоко</p>
+    <p class="pnote">Артикул {art} · в фирменной коробке</p>
     <div class="stories">{''.join(f'<div class="st"><div class="ph" data-ph="Видео"></div><span>{t}</span></div>' for t in ['Как расчёсываться', 'Шесть цветов', 'Упаковка', 'Отзывы'])}</div>
     <div class="pdiag"><p><b>Сомневаетесь в цвете?</b></p><p>Четыре вопроса о вас, не о расчёске.</p><a class="btn btn-outline" href="quiz.html">Пройти подбор</a></div>
     <div class="paccs">{accs}</div>
@@ -214,7 +214,7 @@ def product(sku):
   <div class="rs-bars">{''.join(f'<div><span>{n} ★</span><i><em style="width:{w}%"></em></i><span>ХХ</span></div>' for n, w in [(5, 90), (4, 6), (3, 2), (2, 1), (1, 1)])}</div>
   <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Оставить отзыв в ЗЯ</a></div>
 </section>
-<section class="rlist page">{''.join('<div class="ritem"><div class="rh"><b>Имя покупателя</b><span class="stars">★★★★★</span><span class="rd">ДД.ММ.ГГ · Wildberries</span></div><p>Реальный отзыв с маркетплейса — текст целиком, без правок.</p></div>' for _ in range(3))}</section>
+<section class="rlist page">{''.join('<div class="ritem"><div class="rh"><b>Имя покупателя</b><span class="stars">★★★★★</span><span class="rd">ДД.ММ.ГГ · Wildberries</span></div><p>Реальный отзыв с маркетплейса, текст целиком, без правок.</p></div>' for _ in range(3))}</section>
 <section class="page" style="padding:60px var(--g) 92px">
   <h2 class="w36" style="text-align:center;margin-bottom:16px">Вам может понравиться…</h2>
   <div class="grid4">{''.join(card(o) for o in others)}</div>
@@ -273,7 +273,7 @@ quiz_body = f'''<section class="quiz">
     </div>
   </form>
 </section>'''
-page('quiz.html', 'Подбор расчёски · SANDÓVICH', 'Четыре вопроса — и мы подскажем, какая расчёска SANDÓVICH ваша.', quiz_body, 'quiz')
+page('quiz.html', 'Подбор расчёски · SANDÓVICH', 'Четыре вопроса о вас. Подскажем, какая расчёска SANDÓVICH ваша.', quiz_body, 'quiz')
 
 
 # ---------- Каталог ----------
