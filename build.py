@@ -209,8 +209,42 @@ def add_imgs(html):
     return re.sub(r'<(div|a) class="([^"]*\bph\b[^"]*)"([^>]*?) data-ph="([^"]*)">', rep, html)
 
 
+
+# ---------- Быстрая загрузка фото: WebP 800/1600 (make_webp.py), первый экран грузится сразу ----------
+import os as _os
+_IMG_RE = re.compile(r'<img src="img/([\w-]+)\.jpg"([^>]*)>')
+
+
+def fast_imgs(html):
+    head_end = html.find('</header>')
+    eager_left = [5]
+
+    def rep(m):
+        name, rest = m.group(1), m.group(2)
+        if not _os.path.exists(f'img/w/{name}-800.webp'):
+            return m.group(0)
+        in_body = m.start() > head_end
+        full = 'hero' in html[max(0, m.start() - 200):m.start()] or 's-full' in html[max(0, m.start() - 300):m.start()]
+        sizes = '100vw' if full else '(max-width:600px) 100vw, 50vw'
+        if in_body and eager_left[0] > 0:
+            eager_left[0] -= 1
+            rest = rest.replace(' loading="lazy"', '')
+            if eager_left[0] == 4:
+                rest += ' fetchpriority="high"'
+        return (f'<img src="img/w/{name}-1600.webp" srcset="img/w/{name}-800.webp 800w, img/w/{name}-1600.webp 1600w" '
+                f'sizes="{sizes}"{rest}>')
+    html = _IMG_RE.sub(rep, html)
+    first = re.search(r'</header>.*?<img src="(img/w/[\w-]+)-1600\.webp"[^>]*sizes="([^"]+)"', html, re.S)
+    if first:
+        base = first.group(1)
+        link = (f'<link rel="preload" as="image" href="{base}-1600.webp" '
+                f'imagesrcset="{base}-800.webp 800w, {base}-1600.webp 1600w" imagesizes="{first.group(2)}" fetchpriority="high">\n')
+        html = html.replace('<link rel="stylesheet" href="style.css', link + '<link rel="stylesheet" href="style.css', 1)
+    return html
+
+
 def page(fname, title, desc, body, active=''):
-    open(fname, 'w', encoding='utf-8').write(add_imgs(head(title, desc) + header(active) + body + '\n' + FOOTER.replace('__VER__', VER)))
+    open(fname, 'w', encoding='utf-8').write(fast_imgs(add_imgs(head(title, desc) + header(active) + body + '\n' + FOOTER.replace('__VER__', VER))))
     print('ok', fname)
 
 
