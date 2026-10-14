@@ -452,3 +452,6 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 @media(max-width:600px){.about{padding-left:16px;padding-right:16px}.ab-sec{grid-template-columns:1fr;gap:20px;margin-bottom:44px}.ab-sec.ab-rev .ph{order:0}.ab-sec .ph{height:440px;margin:0 -16px}}
 
 @media (max-width:600px){.zya-line{flex-wrap:wrap;gap:10px;text-align:center;padding:0 16px}.zya-line .letu{margin-left:0;white-space:nowrap}}
+
+/* квиз: поделиться */
+.qr-links{display:flex;flex-wrap:wrap;gap:22px;margin-top:18px}.qr-share{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}

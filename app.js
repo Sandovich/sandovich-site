@@ -158,6 +158,13 @@ if (quiz) {
     return null;
   };
 
+  let shareData = null;
+  document.getElementById('qr-share')?.addEventListener('click', async () => {
+    if (!shareData) return;
+    if (navigator.share) { try { await navigator.share(shareData); } catch (e) {} return; }
+    try { await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`); } catch (e) {}
+    const ok = document.getElementById('qr-copied'); ok.hidden = false; setTimeout(() => { ok.hidden = true; }, 4000);
+  });
   quiz.addEventListener('change', () => {
     const a = Object.fromEntries(new FormData(quiz));
     helpers.forEach((f) => { f.hidden = a.season !== 'unknown'; });
@@ -187,6 +194,7 @@ if (quiz) {
     }
     const card = res.querySelector('.qres-card');
     card.classList.remove('upd'); void card.offsetWidth; card.classList.add('upd');
+    shareData = { title: 'Мой цвет SANDÓVICH', text: `Мой цвет SANDÓVICH: ${NAMES[sku]}. ${SEASON_WHY[season]} А какой ваш?`, url: new URL('quiz.html', location.href).href };
     if (!res.dataset.shown) { res.dataset.shown = '1'; res.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
   });
 }
