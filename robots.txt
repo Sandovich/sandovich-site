@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /_about_
+
+Sitemap: http://sandovich-official.ru/sitemap.xml

@@ -243,8 +243,30 @@ def fast_imgs(html):
     return html
 
 
+
+# ---------- SEO: адрес страницы, превью ссылок, карта сайта ----------
+SITE = 'http://sandovich-official.ru'  # после выпуска HTTPS-сертификата заменить на https://
+OG_IMG = 'img/w/zh-hero-ruby-1600.webp'
+PAGES_BUILT = []
+ORG = ('<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"SANDÓVICH",'
+       '"url":"' + SITE + '/","sameAs":["https://t.me/sandovich_official","https://vk.ru/sandovich_official"]}</script>')
+
+
+def seo_head(fname, title, desc):
+    url = f'{SITE}/' + ('' if fname == 'index.html' else fname)
+    img = f'{SITE}/{OG_IMG}'
+    return (f'<link rel="canonical" href="{url}">\n'
+            f'<meta property="og:type" content="website"><meta property="og:site_name" content="SANDÓVICH"><meta property="og:locale" content="ru_RU">\n'
+            f'<meta property="og:title" content="{title}"><meta property="og:description" content="{desc}">\n'
+            f'<meta property="og:url" content="{url}"><meta property="og:image" content="{img}">\n'
+            f'<meta name="twitter:card" content="summary_large_image">\n'
+            f'<link rel="icon" href="favicon.svg" type="image/svg+xml">\n'
+            + (ORG + '\n' if fname == 'index.html' else ''))
+
+
 def page(fname, title, desc, body, active=''):
-    open(fname, 'w', encoding='utf-8').write(fast_imgs(add_imgs(head(title, desc) + header(active) + body + '\n' + FOOTER.replace('__VER__', VER))))
+    PAGES_BUILT.append(fname)
+    open(fname, 'w', encoding='utf-8').write(fast_imgs(add_imgs(head(title, desc).replace('</head>', seo_head(fname, title, desc) + '</head>', 1) + header(active) + body + '\n' + FOOTER.replace('__VER__', VER))))
     print('ok', fname)
 
 
@@ -488,3 +510,15 @@ about_body = (f'<nav class="crumbs page"><a href="index.html">Главная</a>
               f'<section class="about page"><h1 class="w56c">{ABOUT["h1"]}</h1><p class="ab-lead">{ABOUT["lead"]}</p>{_secs}'
               f'<div class="ab-fin"><p class="w34">{ABOUT["fin"]}</p><a class="btn btn-black" href="quiz.html">{ABOUT["btn"]}</a></div></section>')
 page('about.html', 'О бренде · SANDÓVICH', 'SANDÓVICH: массажные расчёски, которые сначала замечают. Пять цветов, две модели.', about_body, 'about')
+
+
+# ---------- robots.txt и sitemap.xml ----------
+import datetime as _dt
+_today = _dt.date.today().isoformat()
+_prio = {'index.html': '1.0', 'catalog.html': '0.9', 'quiz.html': '0.9'}
+_urls = ''.join(
+    f'<url><loc>{SITE}/{"" if f == "index.html" else f}</loc><lastmod>{_today}</lastmod><priority>{_prio.get(f, "0.8" if f.startswith("product-") else "0.5")}</priority></url>'
+    for f in PAGES_BUILT)
+open('sitemap.xml', 'w', encoding='utf-8').write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{_urls}</urlset>\n')
+open('robots.txt', 'w', encoding='utf-8').write(f'User-agent: *\nAllow: /\nDisallow: /_about_\n\nSitemap: {SITE}/sitemap.xml\n')
+print('ok sitemap', len(PAGES_BUILT))
