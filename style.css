@@ -263,7 +263,7 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 .pacc .pl{font:400 18px/18px var(--futura);letter-spacing:0;width:12px}
 .pacc .a{padding:0 28px 22px;font:400 14px/22px var(--futura);letter-spacing:.32px}
 .rsum{display:flex;justify-content:center;align-items:center;gap:40px;padding-top:80px;padding-bottom:40px}
-.rs-avg{display:flex;align-items:center;gap:12px;padding-right:40px}
+.rs-avg{display:flex;align-items:center;gap:12px;padding-right:40px;border-right:1px solid #ddd}
 .rs-avg b{font:400 48px/1 var(--garamond)}
 .rs-avg p{font:400 14px/18px var(--futura);margin-top:4px}
 .rs-bars{border-left:1px solid #ddd;border-right:1px solid #ddd;padding:0 40px}

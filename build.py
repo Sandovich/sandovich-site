@@ -301,7 +301,6 @@ def product(sku):
 </section>
 <section class="rsum page" id="reviews">
   <div class="rs-avg"><b>{str(rs["avg"]).replace(".", ",")}</b><div><span class="stars">★★★★★</span><p>{fmt_n(rs["n"])} {_word(rs["n"])}</p></div></div>
-  <div class="rs-bars">{''.join(f'<div><span>{k} ★</span><i><em style="width:{round(100 * rs["dist"][str(k)] / rs["n"])}%"></em></i><span>{fmt_n(rs["dist"][str(k)])}</span></div>' for k in (5, 4))}</div>
   <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a></div>
 </section>
 <section class="rlist page">{''.join(f'<div class="ritem"><div class="rh"><b>{r["name"]}</b><span class="stars">★★★★★</span></div><p>{r["text"]}</p></div>' for r in REV["sku"][s]["reviews"])}</section>
