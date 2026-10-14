@@ -4,3 +4,4 @@ pairs/
 __pycache__/
 !img/*.jpg
 img/p-*.jpg
+_about_*.html
