@@ -39,7 +39,7 @@ def head(title, desc):
 <meta name="description" content="{desc}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Tenor+Sans&family=Roboto+Condensed:wght@800&family=EB+Garamond:wght@500&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Roboto+Condensed:wght@800&family=EB+Garamond:wght@500&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -143,7 +143,7 @@ def card(sku, ph=None):
     ph = ph or f'Предметка 4:5 · № {m} {c.lower()}, бежевая драпировка'
     b = f'<span class="badge">{badge}</span>' if badge else ''
     return f'''<div class="card"><a class="img ph" href="product-{s}.html" data-ph="{ph}">{b}<div class="num"><i>№</i><b>{m}</b></div></a>
-      <div class="info"><a class="name" href="product-{s}.html">№ {m} Массажная расчёска {c}</a><div class="price">В Золотом Яблоке</div>
+      <div class="info"><a class="name" href="product-{s}.html">№ {m} Массажная расчёска {c}</a>
       <div class="sw sw-l">{swatch_dots(m, s)}</div></div></div>
 '''
 
@@ -185,7 +185,7 @@ def product(sku):
   <aside class="buy"><div class="buy-in">
     <div class="prate">Х,Х <span class="stars">★★★★★</span> <a href="#reviews" class="ulink">ХХ отзывов</a></div>
     <div class="ptitle"><div class="num"><i>№</i><b>{m}</b></div><h1>№ {m} Массажная расчёска {c}</h1></div>
-    <div class="pprice">В Золотом Яблоке</div>
+    
     <div class="tiles">{tiles}</div>
     <a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a>
     <p class="pnote">Артикул {art} · доставка и самовывоз — через Золотое Яблоко</p>
