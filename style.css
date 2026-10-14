@@ -416,12 +416,12 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 .ph.pack>img{object-fit:cover}
 .mg-feat .ph.has-img .w28,.s-full .ph.has-img~.ov{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .qb[hidden]{display:none}
-.hero .ph.has-img>img{object-position:50% 45%}
+.hero .ph.has-img>img{object-position:50% 52%}
 .s-full .ph.has-img>img{object-position:50% 50%}
 /* затемнение снизу, чтобы белые заголовки читались на светлых фото */
 .ph.has-img:not(.pack)::after{display:block;content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(0,0,0,.42),rgba(0,0,0,0) 55%)}
 .cols .ph.has-img::after,.g2 .ph.has-img::after,.g3 .ph.has-img::after,.s-two .ph.has-img::after,.dip .ph.has-img::after,.cgrid .ed .ph.has-img::after{display:none}
 /* Плёночный тон и зерно, как на фото La Bonne Brosse (только кадры, не предметка) */
-.ph.has-img:not(.pack)>img{filter:contrast(.94) saturate(.88) sepia(.07) brightness(1.03)}
-.ph.has-img:not(.pack)::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+.ph.has-img:not(.pack)>img{filter:contrast(1.02) saturate(1.06) sepia(.06) brightness(1.01)}
+.ph.has-img:not(.pack)::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.45;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
