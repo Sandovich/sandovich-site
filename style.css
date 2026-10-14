@@ -431,3 +431,6 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 /* плёнка на предметке карточек: зерно на ::after, чтобы не сломать чёрную черту под номером (::before) */
 .ph.has-img.pack::after{display:block;content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.45;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .dip .ph.has-img>img{object-position:50% 8%}
+
+/* страница отзывов */
+.rv{padding-bottom:80px}.rv-rate{justify-content:center;margin:12px 0 8px}.rv-tabs{flex-wrap:wrap;justify-content:center}#rvmore{margin-top:32px;width:271px}

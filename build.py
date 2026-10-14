@@ -239,7 +239,7 @@ def rev_card(r):
 
 
 # ---------- Главная ----------
-home = open('src/home.html', encoding='utf-8').read()
+home = open('src/home.html', encoding='utf-8').read().replace('<a class="ulink" href="#">Все отзывы</a>', '<a class="ulink" href="reviews.html">Все отзывы</a>')
 _a = REV['all']
 home = re.sub(r'<div class="rate">.*?</div>', f'<div class="rate">{str(_a["avg"]).replace(".", ",")} <span class="stars">★★★★★</span> ({fmt_n(_a["n"])} {_word(_a["n"])})</div>', home, count=1, flags=re.S)
 home = re.sub(r'(<div class="revs">).*?(</div>\s*<div class="arrows")', lambda m: m.group(1) + ''.join(rev_card(r) for r in REV['home']) + '\n  </div>\n  <div class="arrows"', home, count=1, flags=re.S)
@@ -293,7 +293,7 @@ def product(sku):
 </section>
 <section class="rsum page" id="reviews">
   <div class="rs-avg"><b>{str(rs["avg"]).replace(".", ",")}</b><div><span class="stars">★★★★★</span><p>{fmt_n(rs["n"])} {_word(rs["n"])}</p></div></div>
-  <div class="rs-bars">{''.join(f'<div><span>{k} ★</span><i><em style="width:{round(100 * rs["dist"][str(k)] / rs["n"])}%"></em></i><span>{fmt_n(rs["dist"][str(k)])}</span></div>' for k in range(5, 0, -1))}</div>
+  <div class="rs-bars">{''.join(f'<div><span>{k} ★</span><i><em style="width:{round(100 * rs["dist"][str(k)] / rs["n"])}%"></em></i><span>{fmt_n(rs["dist"][str(k)])}</span></div>' for k in (5, 4))}</div>
   <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a></div>
 </section>
 <section class="rlist page">{''.join(f'<div class="ritem"><div class="rh"><b>{r["name"]}</b><span class="stars">★★★★★</span><span class="rd">{fmt_d(r["date"])}</span></div><p>{r["text"]}</p></div>' for r in REV["sku"][s]["reviews"])}</section>
@@ -383,3 +383,19 @@ cat_body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><
 </section>'''
 page('catalog.html', 'Расчёски SANDÓVICH · каталог', 'Все массажные расчёски SANDÓVICH: модели № 01 и № 02, шесть цветов.', cat_body, 'brushes')
 print(ZYA_NOTE)
+
+
+# ---------- Все отзывы (4–5 звёзд, тексты дословно) ----------
+_all = open('reviews-all.json', encoding='utf-8').read().replace('</', '<\\/')
+_tabs = ''.join(f'<a href="#" data-r="{k}"{" class=\"on\"" if k == "all" else ""}>{t}</a>' for k, t in
+                [('all', 'Все')] + [(sk, f'№ {m} {c}') for sk, m, c, *_ in PRODUCTS])
+rev_body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><span>›</span><span>Отзывы</span></nav>
+<section class="rv page">
+  <h1 class="w56c">Отзывы</h1>
+  <div class="rate rv-rate">{str(REV["all"]["avg"]).replace(".", ",")} <span class="stars">★★★★★</span> ({fmt_n(REV["all"]["n"])} {_word(REV["all"]["n"])})</div>
+  <div class="ctabs rv-tabs">{_tabs}</div>
+  <div class="rlist" id="rvlist"></div>
+  <div style="text-align:center"><button class="btn btn-outline" id="rvmore" type="button">Показать ещё</button></div>
+</section>
+<script type="application/json" id="rvdata">{_all}</script>'''
+page('reviews.html', 'Отзывы · SANDÓVICH', 'Что пишут покупательницы о массажных расчёсках SANDÓVICH.', rev_body)

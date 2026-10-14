@@ -52,14 +52,44 @@ const drawer = document.getElementById('drawer');
 document.querySelector('.burger')?.addEventListener('click', () => { drawer.hidden = false; document.body.style.overflow = 'hidden'; });
 document.querySelector('.dr-close')?.addEventListener('click', () => { drawer.hidden = true; document.body.style.overflow = ''; });
 
-// Стрелки отзывов
+// Стрелки отзывов: листаем на ширину видимой части, неактивная стрелка бледнеет
 document.querySelectorAll('[data-scroll]').forEach((box) => {
   const track = document.querySelector(box.dataset.scroll);
   const [prev, next] = box.querySelectorAll('svg');
-  const step = () => track.firstElementChild.getBoundingClientRect().width;
-  prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-  next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  const go = (dir) => track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+  const sync = () => {
+    const end = track.scrollWidth - track.clientWidth - 2;
+    prev?.setAttribute('stroke', track.scrollLeft > 2 ? '#000' : '#bbb');
+    next?.setAttribute('stroke', track.scrollLeft < end ? '#000' : '#bbb');
+  };
+  [prev, next].forEach((el, i) => { if (!el) return; el.style.cursor = 'pointer'; el.addEventListener('click', () => go(i ? 1 : -1)); });
+  track.addEventListener('scroll', sync, { passive: true }); sync();
 });
+
+// Страница всех отзывов: вкладки по цвету и «Показать ещё»
+const rvdata = document.getElementById('rvdata');
+if (rvdata) {
+  const all = JSON.parse(rvdata.textContent);
+  const list = document.getElementById('rvlist');
+  const more = document.getElementById('rvmore');
+  const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  const d = (x) => `${x.slice(8, 10)}.${x.slice(5, 7)}.${x.slice(2, 4)}`;
+  let cur = 'all'; let shown = 0;
+  const items = () => (cur === 'all' ? all : all.filter((r) => r.sku === cur));
+  const render = (reset) => {
+    if (reset) { list.innerHTML = ''; shown = 0; }
+    const part = items().slice(shown, shown + 20);
+    list.insertAdjacentHTML('beforeend', part.map((r) => `<div class="ritem"><div class="rh"><b>${esc(r.name)}</b><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</span><span class="rd">${d(r.date)}</span></div><p>${esc(r.text)}</p></div>`).join(''));
+    shown += part.length;
+    more.hidden = shown >= items().length;
+  };
+  document.querySelectorAll('[data-r]').forEach((t) => t.addEventListener('click', (e) => {
+    e.preventDefault(); cur = t.dataset.r;
+    document.querySelectorAll('[data-r]').forEach((x) => x.classList.toggle('on', x === t)); render(true);
+  }));
+  more.addEventListener('click', () => render(false));
+  render(true);
+}
 
 // «+» → «−» у раскрывающихся вопросов
 document.querySelectorAll('details').forEach((d) => {

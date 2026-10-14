@@ -5,7 +5,7 @@ const fs = require('fs');
 const url = (f) => 'file:///' + path.resolve(__dirname, f).split(path.sep).join('/');
 const out = path.join(__dirname, 'test_shots');
 fs.mkdirSync(out, { recursive: true });
-const PAGES = ['index.html', 'catalog.html', 'quiz.html', 'product-01-gold.html', 'product-02-pink.html'];
+const PAGES = ['reviews.html', 'index.html', 'catalog.html', 'quiz.html', 'product-01-gold.html', 'product-02-pink.html'];
 const results = [];
 const ok = (name, cond, extra = '') => results.push(`${cond ? 'OK  ' : 'FAIL'} ${name}${extra ? ' — ' + extra : ''}`);
 
