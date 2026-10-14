@@ -151,7 +151,7 @@ PH_IMG = {
     'Фото 459×689 · модель с расчёской, светлый фон, крупно': 'blk-58',  # согласовано 14.10
     'Фото 459×689 · модель в очках / пиджаке, расчёска у головы, ироничный editorial': 'blk-62',  # согласовано 14.10
     'Фото 1440×576 · руки держат расчёску и коробку, крупный план, без лица': 'blk-74',  # «Подарите характер», согласовано 14.10
-    'Фото 720×600 · модель расчёсывает длинные волосы, editorial, контрастный интерьер': 'blk-139',  # согласовано 14.10
+    'Фото 720×600 · модель расчёсывает длинные волосы, editorial, контрастный интерьер': 'blk-31',  # согласовано 14.10
 }
 import os as _os
 if _os.environ.get('PREVIEW'):  # мудборды по блокам: кандидаты, не согласованы, не выкладывать
@@ -224,8 +224,24 @@ def card(sku, ph=None):
 '''
 
 
+# ---------- Отзывы: реальные, из выгрузки Wildberries (../отзывы/make_reviews.py → reviews.json) ----------
+import json as _json
+REV = _json.load(open('reviews.json', encoding='utf-8'))
+fmt_n = lambda n: f'{n:,}'.replace(',', '\u00a0')
+fmt_d = lambda d: f'{d[8:10]}.{d[5:7]}.{d[2:4]}'
+def _word(n):
+    n10, n100 = n % 10, n % 100
+    return 'отзыв' if n10 == 1 and n100 != 11 else 'отзыва' if 2 <= n10 <= 4 and not 12 <= n100 <= 14 else 'отзывов'
+def rev_card(r):
+    return (f'<div class="rev"><div class="top"><span>{r["name"]}</span><span class="stars">★★★★★</span></div>'
+            f'<div class="txt">{r["text"]}</div><div class="dt">{fmt_d(r["date"])}</div></div>')
+
+
 # ---------- Главная ----------
 home = open('src/home.html', encoding='utf-8').read()
+_a = REV['all']
+home = re.sub(r'<div class="rate">.*?</div>', f'<div class="rate">{str(_a["avg"]).replace(".", ",")} <span class="stars">★★★★★</span> ({fmt_n(_a["n"])} {_word(_a["n"])})</div>', home, count=1, flags=re.S)
+home = re.sub(r'(<div class="revs">).*?(</div>\s*<div class="arrows")', lambda m: m.group(1) + ''.join(rev_card(r) for r in REV['home']) + '\n  </div>\n  <div class="arrows"', home, count=1, flags=re.S)
 page('index.html', 'SANDÓVICH · массажные расчёски, которые не прячут',
      'Массажные расчёски SANDÓVICH: две модели, шесть цветов. Продаются в Золотом Яблоке.', home)
 
@@ -249,6 +265,7 @@ def product(sku):
         ('Уход', 'Волосы со щетины лучше снимать сразу. Мыть расчёску можно целиком: тёплая вода, немного шампуня, мягкая щётка между рядами. Сохнет щетиной вниз, вдали от батареи и солнца.'),
         ('Где купить', 'В магазинах Золотого Яблока и на goldapple.ru. Каждая расчёска продаётся в фирменной коробке.'),
     ]
+    rs = REV['sku'][s]['stats']
     accs = ''.join(f'<details class="pacc"><summary><span class="pl">+</span>{t}</summary><div class="a">{a}</div></details>' for t, a in acc)
     others = [p[0] for p in PRODUCTS if p[0] != s][:4]
     body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><span>›</span><a href="catalog.html">Расчёски</a><span>›</span><span>№ {m} Массажная расчёска {c}</span></nav>
@@ -258,7 +275,7 @@ def product(sku):
     <div class="g3">{gal(f'zya-{s}-2')}{gal(f'zya-{s}-3')}{gal(f'zya-{s}-5')}</div>
   </div>
   <aside class="buy"><div class="buy-in">
-    <div class="prate">Х,Х <span class="stars">★★★★★</span> <a href="#reviews" class="ulink">ХХ отзывов</a></div>
+    <div class="prate">{str(rs["avg"]).replace(".", ",")} <span class="stars">★★★★★</span> <a href="#reviews" class="ulink">{fmt_n(rs["n"])} {_word(rs["n"])}</a></div>
     <div class="ptitle"><div class="num"><i>№</i><b>{m}</b></div><h1>№ {m} Массажная расчёска {c}</h1></div>
     
     <div class="tiles">{tiles}</div>
@@ -274,11 +291,11 @@ def product(sku):
   <div class="ov"><div class="w64">Какая расчёска ваша?</div><a class="btn btn-line" href="quiz.html" style="margin-top:8px">Подобрать</a></div></div>
 </section>
 <section class="rsum page" id="reviews">
-  <div class="rs-avg"><b>Х,Х</b><div><span class="stars">★★★★★</span><p>На основе ХХ отзывов с Wildberries и Ozon</p></div></div>
-  <div class="rs-bars">{''.join(f'<div><span>{n} ★</span><i><em style="width:{w}%"></em></i><span>ХХ</span></div>' for n, w in [(5, 90), (4, 6), (3, 2), (2, 1), (1, 1)])}</div>
-  <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Оставить отзыв в ЗЯ</a></div>
+  <div class="rs-avg"><b>{str(rs["avg"]).replace(".", ",")}</b><div><span class="stars">★★★★★</span><p>{fmt_n(rs["n"])} {_word(rs["n"])}</p></div></div>
+  <div class="rs-bars">{''.join(f'<div><span>{k} ★</span><i><em style="width:{round(100 * rs["dist"][str(k)] / rs["n"])}%"></em></i><span>{fmt_n(rs["dist"][str(k)])}</span></div>' for k in range(5, 0, -1))}</div>
+  <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a></div>
 </section>
-<section class="rlist page">{''.join('<div class="ritem"><div class="rh"><b>Имя покупателя</b><span class="stars">★★★★★</span><span class="rd">ДД.ММ.ГГ · Wildberries</span></div><p>Реальный отзыв с маркетплейса, текст целиком, без правок.</p></div>' for _ in range(3))}</section>
+<section class="rlist page">{''.join(f'<div class="ritem"><div class="rh"><b>{r["name"]}</b><span class="stars">★★★★★</span><span class="rd">{fmt_d(r["date"])}</span></div><p>{r["text"]}</p></div>' for r in REV["sku"][s]["reviews"])}</section>
 <section class="page" style="padding:60px var(--g) 92px">
   <h2 class="w36" style="text-align:center;margin-bottom:16px">Вам может понравиться…</h2>
   <div class="grid4">{''.join(card(o) for o in others)}</div>
