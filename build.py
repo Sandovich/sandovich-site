@@ -253,7 +253,7 @@ _a = REV['all']
 home = re.sub(r'<div class="rate">.*?</div>', f'<div class="rate">{str(_a["avg"]).replace(".", ",")} <span class="stars">★★★★★</span> ({fmt_n(_a["n"])} {_word(_a["n"])})</div>', home, count=1, flags=re.S)
 home = re.sub(r'(<div class="revs">).*?(</div>\s*<div class="arrows")', lambda m: m.group(1) + ''.join(rev_card(r) for r in REV['home']) + '\n  </div>\n  <div class="arrows"', home, count=1, flags=re.S)
 page('index.html', 'SANDÓVICH · массажные расчёски, которые не прячут',
-     'Массажные расчёски SANDÓVICH: две модели, шесть цветов. Продаются в Золотом Яблоке.', home)
+     'Массажные расчёски SANDÓVICH: две модели, пять цветов. Продаются в Золотом Яблоке.', home)
 
 
 # ---------- Карточка товара ----------
@@ -389,7 +389,7 @@ cat_body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><
   <div class="cbar"><span>Фильтр</span><span class="sort">Сортировка: <b>Рекомендуем</b></span><span class="cnt" id="cnt">6 расчёсок</span></div>
   <div class="cgrid" id="cgrid">{grid}</div>
 </section>'''
-page('catalog.html', 'Расчёски SANDÓVICH · каталог', 'Все массажные расчёски SANDÓVICH: модели № 01 и № 02, шесть цветов.', cat_body, 'brushes')
+page('catalog.html', 'Расчёски SANDÓVICH · каталог', 'Все массажные расчёски SANDÓVICH: модели № 01 и № 02, пять цветов.', cat_body, 'brushes')
 print(ZYA_NOTE)
 
 
