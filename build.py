@@ -71,7 +71,7 @@ def mega_links(items):
 
 BRUSH_LINKS = [('Модель № 01', 'catalog.html#m01'), ('Модель № 02', 'catalog.html#m02'), ('Все расчёски', 'catalog.html'), ('В подарок', 'catalog.html#gift')]
 COLOR_LINKS = [(f'№ {m} {c}', f'product-{s}.html') for s, m, c, *_ in PRODUCTS]
-ABOUT_LINKS = [('О бренде', 'index.html#about'), ('Ритуал', 'index.html#ritual'), ('Вопросы и ответы', 'index.html#faq'), ('Где купить', 'https://goldapple.ru/volosy/aksessuary/rascheski?brandobjectid=1913789')]
+ABOUT_LINKS = [('О бренде', 'about.html'), ('Ритуал', 'index.html#ritual'), ('Вопросы и ответы', 'index.html#faq'), ('Где купить', 'https://goldapple.ru/volosy/aksessuary/rascheski?brandobjectid=1913789')]
 
 
 def header(active=''):
@@ -88,7 +88,7 @@ def header(active=''):
       {li('ritual', 'Ритуал', 'index.html#ritual')}
       {li('quiz', 'Подбор', 'quiz.html')}
       {li('gift', 'В подарок', 'catalog.html#gift')}
-      {li('about', 'О бренде', 'index.html#about', 'mg-about')}
+      {li('about', 'О бренде', 'about.html', 'mg-about')}
     </ul>
     <div class="icons">
       <a href="catalog.html" aria-label="Поиск">{ICON['search']}</a>
@@ -434,3 +434,24 @@ page('privacy.html', 'Политика конфиденциальности · S
 <h2>5. Изменения</h2>
 <p>Если на сайте появятся формы или аналитика, политика будет обновлена до их запуска. Актуальная версия всегда на этой странице.</p>
 <p class="legal-date">Редакция от 14 октября 2026 года.</p>'''))
+
+
+# ---------- О бренде (текст Гермеса, вариант B, согласован 14.10) ----------
+ABOUT = dict(
+    h1='Сначала её замечают',
+    lead='Потом берут в руки. Потом спрашивают, как называется. SANDÓVICH, массажные расчёски с 2024 года.',
+    secs=[
+        ('Цвет говорит первым', 'Gold, Silver, Bronze, Ruby, Pink. Ни один из пяти не назовёшь нейтральным. Цвет рассказывает о владелице раньше, чем она сама: тёплая или прохладная, громкая или тихая, всерьёз или с улыбкой.', 'blk-74', '50% 30%'),
+        ('Темп выбираете вы', '№ 01 для тех, кто любит задержаться у зеркала. № 02 для тех, кто собирается быстро и не терпит лишнего. Красный есть в обеих моделях: Ruby бывает и неспешной, и стремительной.', 'blk-31', '50% 6%'),
+        ('Красиво не значит хрупко', 'Корпус из крашеного ABS-пластика, щетина нейлоновая, кончики закруглены. Мокрые волосы, маска по длине, душ, мытьё целиком в воде: всё это ей можно. Красивой она бывает не только на полке.', 'blk-237', '50% 30%'),
+        ('Где её найти', 'На goldapple.ru. Каждая SANDÓVICH приходит в фирменной коробке, поэтому подарок готов, как только выбран цвет. Средняя оценка 4,9 по тысячам отзывов: так её оценили те, у кого она уже дома.', 'blk-174', '50% 20%'),
+    ],
+    fin='Пять цветов. Один из них ваш.', btn='Пройти подбор')
+_secs = ''.join(
+    f'<div class="ab-sec{" ab-rev" if i % 2 else ""}"><div class="ph has-img"><img src="img/{im}.jpg" alt="" loading="lazy" decoding="async" style="object-position:{pos}"></div>'
+    f'<div class="ab-tx"><h2 class="w34">{t}</h2><p>{tx}</p></div></div>'
+    for i, (t, tx, im, pos) in enumerate(ABOUT['secs']))
+about_body = (f'<nav class="crumbs page"><a href="index.html">Главная</a><span>›</span><span>О бренде</span></nav>'
+              f'<section class="about page"><h1 class="w56c">{ABOUT["h1"]}</h1><p class="ab-lead">{ABOUT["lead"]}</p>{_secs}'
+              f'<div class="ab-fin"><p class="w34">{ABOUT["fin"]}</p><a class="btn btn-black" href="quiz.html">{ABOUT["btn"]}</a></div></section>')
+page('about.html', 'О бренде · SANDÓVICH', 'SANDÓVICH: массажные расчёски, которые сначала замечают. Пять цветов, две модели.', about_body, 'about')

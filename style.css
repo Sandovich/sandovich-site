@@ -446,3 +446,7 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 /* плашка Л’Этуаль в подвале */
 .zya-line .letu{margin-left:14px;padding:2px 8px;border:1px solid #c9c4bd;border-radius:10px;color:#7d7871;letter-spacing:1.4px;font-size:10px}
 .zya-line .letu:hover{color:#000;border-color:#000}
+
+/* О бренде */
+.about{padding-bottom:90px}.ab-lead{max-width:620px;margin:8px auto 56px;text-align:center;font:400 17px/28px var(--futura)}.ab-sec{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:64px}.ab-sec.ab-rev .ph{order:2}.ab-sec .ph{height:560px}.ab-tx p{font:400 15px/26px var(--futura);margin-top:14px;max-width:460px}.ab-fin{text-align:center;margin-top:24px}.ab-fin .btn{margin-top:24px;width:271px}
+@media(max-width:600px){.about{padding-left:16px;padding-right:16px}.ab-sec{grid-template-columns:1fr;gap:20px;margin-bottom:44px}.ab-sec.ab-rev .ph{order:0}.ab-sec .ph{height:440px;margin:0 -16px}}
