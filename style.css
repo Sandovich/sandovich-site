@@ -369,7 +369,7 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
   .cols{grid-template-columns:repeat(4,92%);overflow-x:auto;gap:16px;scroll-snap-type:x mandatory}
   .cols>div{scroll-snap-align:start}
   .cols .ph{height:448px}
-  .faq{width:auto}
+  .faq{width:auto;margin:0 16px}
   .q summary{padding-bottom:8px}
   .s-seo{padding:48px 0}
   .s-seo .in{width:auto}
