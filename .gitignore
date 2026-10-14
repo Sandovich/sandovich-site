@@ -2,3 +2,4 @@ test_shots/
 pairs/
 *.jpg
 __pycache__/
+!img/*.jpg

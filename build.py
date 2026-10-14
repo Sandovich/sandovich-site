@@ -1,3 +1,5 @@
+import re
+
 # Сборка сайта SANDÓVICH (копия структуры labonnebrosse.com 1:1):
 #   python -X utf8 build.py  →  index.html, catalog.html, quiz.html, product-<sku>.html
 # Общие части (head, шапка, мега-меню, мобильное меню, подвал) — здесь; стили — style.css; поведение — app.js.
@@ -135,8 +137,46 @@ FOOTER = '''<footer class="ftr">
 '''
 
 
+# ---------- Фото (новая студийная съёмка, авг 2026; модель по цветотипу совпадает с цветом) ----------
+# Текст плашки (data-ph) → файл в img/. Карточки товаров берут предметку по ссылке product-<sku>.
+PH_IMG = {
+    # Только согласованные фото (14.10). Остальные блоки — серые плашки до выбора по мудбордам.
+    'Фото 1440×720 · расчёска как украшение или неожиданный объект (напр. девушка в бигуди и очках с расчёской розового золота, поднос под колпаком)': 'zh-hero-ruby',
+    'Фото 585×877 · модель в очках, расчёска у головы, ироничный editorial': 'sc-curlers-glasses',
+}
+# Галерея товара: героиня по цветотипу (Весна — Gold/Bronze, Лето — Silver/Pink, Зима — Ruby)
+GALLERY = {
+    '01-gold':   ['v-spring-gold-comb', 'v-spring-gold-hands2', 'm-spring-gold-hands'],
+    '01-silver': ['m-summer-silver', 'm-winter-silver-tights', 'v-winter-silver-teeth'],
+    '01-bronze': ['v-spring-bronze-comb', 'v-spring-bronze-hands', 'v-spring-bronze-hair'],
+    '01-ruby':   ['m-winter-ruby01-a', 'v-winter-ruby01-teeth', 'sc-hands-five'],
+    '02-ruby':   ['v-winter-ruby02-cheek', 'v-winter-ruby02-floor', 'v-winter-ruby02-squat'],
+    '02-pink':   ['m-summer-pink', 'v-summer-pink-lie', 'v-summer-pink-hair'],
+}
+BOX = {'01-gold': 'box-01-gold', '01-silver': 'box-01-silver', '01-bronze': 'box-01-bronze',
+       '01-ruby': 'box-01-ruby', '02-ruby': 'v-winter-ruby02-c2', '02-pink': 'box-02-pink'}
+
+
+def img(name, extra=''):
+    return f'<img src="img/{name}.jpg" alt="" loading="lazy" decoding="async"{extra}>'
+
+
+def add_imgs(html):
+    def rep(m):
+        tag, cls, rest, ph = m.group(1), m.group(2), m.group(3), m.group(4)
+        if 'has-img' in cls:
+            return m.group(0)
+        sku = re.search(r'href="product-([0-9]{2}-[a-z]+)\.html"', rest)
+        if tag == 'a' and 'img' in cls.split() and sku:
+            return f'<{tag} class="{cls} has-img pack"{rest} data-ph="{ph}">' + img('zya-' + sku.group(1) + '-1')
+        if ph in PH_IMG:
+            return f'<{tag} class="{cls} has-img"{rest} data-ph="{ph}">' + img(PH_IMG[ph])
+        return m.group(0)
+    return re.sub(r'<(div|a) class="([^"]*\bph\b[^"]*)"([^>]*?) data-ph="([^"]*)">', rep, html)
+
+
 def page(fname, title, desc, body, active=''):
-    open(fname, 'w', encoding='utf-8').write(head(title, desc) + header(active) + body + '\n' + FOOTER)
+    open(fname, 'w', encoding='utf-8').write(add_imgs(head(title, desc) + header(active) + body + '\n' + FOOTER))
     print('ok', fname)
 
 
@@ -176,7 +216,8 @@ def product(sku):
             continue
         cls = ' class="on"' if s2 == s else ''
         tiles += f'<a{cls} href="product-{s2}.html" title="{c2}"><span style="background:{hex2}"></span></a>'
-    gal = lambda w, h, t: f'<div class="ph" data-ph="Фото {w}×{h} · {t}"></div>'
+    g = GALLERY[s]
+    gal = lambda name, pack=False: f'<div class="ph has-img{" pack" if pack else ""}">{img(name)}</div>'
     acc = [
         ('Описание', DESC[s]),
         ('Как пользоваться', HOWTO[m]),
@@ -189,9 +230,8 @@ def product(sku):
     body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><span>›</span><a href="catalog.html">Расчёски</a><span>›</span><span>№ {m} Массажная расчёска {c}</span></nav>
 <section class="pdp page">
   <div class="gallery">
-    <div class="g2">{gal(375, 468, f'№ {m} {c.lower()}, вид сбоку и анфас, бежевая драпировка')}{gal(375, 468, 'расчёска в руке, крупно, editorial')}</div>
-    <div class="g3">{gal(245, 306, 'вид сбоку')}{gal(245, 306, 'щетина крупно')}{gal(245, 306, 'в руке у модели')}</div>
-    <div class="g2">{gal(375, 468, 'деталь крупно, макро')}{gal(375, 468, 'расчёска с фирменной коробкой')}</div>
+    <div class="g2">{gal(f'zya-{s}-1', True)}{gal(f'zya-{s}-4')}</div>
+    <div class="g3">{gal(f'zya-{s}-2')}{gal(f'zya-{s}-3')}{gal(f'zya-{s}-5')}</div>
   </div>
   <aside class="buy"><div class="buy-in">
     <div class="prate">Х,Х <span class="stars">★★★★★</span> <a href="#reviews" class="ulink">ХХ отзывов</a></div>
@@ -201,7 +241,7 @@ def product(sku):
     <a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a>
     <p class="pnote">Артикул {art} · в фирменной коробке</p>
     <div class="stories">{''.join(f'<div class="st"><div class="ph" data-ph="Видео"></div><span>{t}</span></div>' for t in ['Как расчёсываться', 'Шесть цветов', 'Упаковка', 'Отзывы'])}</div>
-    <div class="pdiag"><p><b>Сомневаетесь в цвете?</b></p><p>Четыре вопроса о вас, не о расчёске.</p><a class="btn btn-outline" href="quiz.html">Пройти подбор</a></div>
+    <div class="pdiag"><p><b>Сомневаетесь в цвете?</b></p><p>Подбор по цветотипу: пара вопросов о вас.</p><a class="btn btn-outline" href="quiz.html">Пройти подбор</a></div>
     <div class="paccs">{accs}</div>
   </div></aside>
 </section>
@@ -229,16 +269,23 @@ for p in PRODUCTS:
 
 # ---------- Квиз ----------
 QUIZ = [
-    ('Металл', 'Какой металл вы носите чаще?', 'Кольца, серьги, часы. То, что надеваете не задумываясь.', 'metal',
-     [('gold', 'Золото', 'ring-g'), ('silver', 'Серебро', 'ring-s'), ('rose', 'Розовое золото', 'ring-r'), ('none', 'Не ношу', 'ring-0')]),
+    ('Цветотип', 'Какой у вас цветотип?', 'Не знаете свой? Выберите «Не знаю», подскажем двумя вопросами.', 'season',
+     [('spring', 'Весна', 's-spring'), ('summer', 'Лето', 's-summer'), ('autumn', 'Осень', 's-autumn'), ('winter', 'Зима', 's-winter'), ('unknown', 'Не знаю', 's-unknown')]),
     ('Темп', 'Что про вас?', 'Речь о характере, а не о расписании.', 'model',
      [('01', 'Собираюсь основательно', 'h-long'), ('02', 'Быстро и без суеты', 'h-short'), ('any', 'Бывает по-разному', 'h-any')]),
-    ('Место', 'Где она будет жить?', 'Там, где чаще всего попадается на глаза.', 'place',
-     [('table', 'Туалетный столик', 'p-table'), ('bag', 'Сумка', 'p-bag'), ('bath', 'Ванная', 'p-bath'), ('gift', 'Подарок', 'p-gift')]),
-    ('Акцент', 'Какой цвет в образе главный?', 'Помада, сумка, ногти. То, что замечают первым.', 'accent',
-     [('red', 'Красный', 'c-red'), ('nude', 'Нюд', 'c-nude'), ('black', 'Чёрный', 'c-black'), ('pink', 'Розовый', 'c-pink')]),
+    ('Подтон', 'Какой металл освежает лицо?', 'Приложите к лицу золотое и серебряное украшение. С каким кожа выглядит свежее?', 'tone',
+     [('warm', 'Золото', 'ring-g'), ('cool', 'Серебро', 'ring-s')]),
+    ('Контраст', 'Волосы и кожа рядом:', 'Посмотрите на себя без макияжа при дневном свете.', 'depth',
+     [('light', 'Светлые, мягкий контраст', 'd-light'), ('deep', 'Тёмные или яркий контраст', 'd-deep')]),
 ]
 QICON = {
+    's-spring': '<circle cx="20" cy="32" r="8" fill="#ffefae"/><circle cx="32" cy="32" r="8" fill="#eeb480"/><circle cx="44" cy="32" r="8" fill="#c5a56e"/>',
+    's-summer': '<circle cx="20" cy="32" r="8" fill="#f9c1ce"/><circle cx="32" cy="32" r="8" fill="#a5c8d1"/><circle cx="44" cy="32" r="8" fill="#b6bfc1"/>',
+    's-autumn': '<circle cx="20" cy="32" r="8" fill="#802626"/><circle cx="32" cy="32" r="8" fill="#d8a37b"/><circle cx="44" cy="32" r="8" fill="#1a7444"/>',
+    's-winter': '<circle cx="20" cy="32" r="8" fill="#ab2439"/><circle cx="32" cy="32" r="8" fill="#5a82b3"/><circle cx="44" cy="32" r="8" fill="#111314"/>',
+    's-unknown': '<circle cx="32" cy="32" r="14" stroke="#000"/><path d="M27 28a5 5 0 1 1 7 4.6c-1.3.6-2 1.6-2 3V37M32 41v1" stroke="#000"/>',
+    'd-light': '<circle cx="26" cy="32" r="10" fill="#f3e3cf"/><circle cx="40" cy="32" r="10" fill="#e8c98f"/>',
+    'd-deep': '<circle cx="26" cy="32" r="10" fill="#f3e3cf"/><circle cx="40" cy="32" r="10" fill="#2a1d18"/>',
     'ring-g': '<circle cx="32" cy="32" r="14" stroke="#B08A3E" stroke-width="3"/>',
     'ring-s': '<circle cx="32" cy="32" r="14" stroke="#A9ABB0" stroke-width="3"/>',
     'ring-r': '<circle cx="32" cy="32" r="14" stroke="#B4785A" stroke-width="3"/>',
@@ -258,26 +305,28 @@ QICON = {
 qblocks = ''
 for title, q, hint, name, opts in QUIZ:
     o = ''.join(f'<label class="qo"><input type="radio" name="{name}" value="{v}"><span class="qi"><svg viewBox="0 0 64 64" fill="none">{QICON[ic]}</svg></span><span class="ql">{t}</span></label>' for v, t, ic in opts)
-    qblocks += f'<fieldset class="qb"><legend class="w30">{title}</legend><p class="qq">{q}</p><p class="qh">{hint}</p><div class="qopts">{o}</div></fieldset>'
+    helper = ' qhelp" hidden data-help="1' if name in ('tone', 'depth') else ''
+    qblocks += f'<fieldset class="qb{helper}"><legend class="w30">{title}</legend><p class="qq">{q}</p><p class="qh">{hint}</p><div class="qopts">{o}</div></fieldset>'
 quiz_body = f'''<section class="quiz">
   <div class="qimg"><div class="ph dark" data-ph="Фото 585×877 · модель в очках, расчёска у головы, ироничный editorial"></div><p class="w56">Ваш характер</p></div>
   <form class="qform" id="quiz">{qblocks}
     <div class="qres" id="qres" hidden>
       <p class="qq">Ваша расчёска:</p>
       <div class="qres-card">
-        <a class="img ph" id="qr-img" href="#" data-ph="Предметка 4:5"><div class="num"><i>№</i><b id="qr-num">01</b></div></a>
+        <a class="img ph has-img pack" id="qr-img" href="#"><img id="qr-pic" src="img/zya-01-gold-1.jpg" alt=""><div class="num"><i>№</i><b id="qr-num">01</b></div></a>
         <div><p class="w30" id="qr-name">№ 01 Золото</p><p class="qh" id="qr-why"></p>
+        <p class="qh" id="qr-alt" hidden>Ещё подойдёт: <a class="ulink" id="qr-alt-a" href="#"></a></p>
         <a class="btn btn-black zya" id="qr-buy" href="#">Купить в Золотом Яблоке</a>
         <a class="ulink" id="qr-more" href="#" style="display:inline-block;margin-top:18px">Подробнее о расчёске</a></div>
       </div>
     </div>
   </form>
 </section>'''
-page('quiz.html', 'Подбор расчёски · SANDÓVICH', 'Четыре вопроса о вас. Подскажем, какая расчёска SANDÓVICH ваша.', quiz_body, 'quiz')
+page('quiz.html', 'Подбор расчёски · SANDÓVICH', 'Подбор по цветотипу: подскажем, какой цвет SANDÓVICH ваш.', quiz_body, 'quiz')
 
 
 # ---------- Каталог ----------
-stories = ''.join(f'<a class="story" href="product-{s}.html"><div class="ph" data-ph="Фото 129×129"></div><span>№ {m} {c}</span></a>' for s, m, c, *_ in PRODUCTS)
+stories = ''.join(f'<a class="story" href="product-{s}.html"><div class="ph has-img pack">{img("zya-" + s + "-1")}</div><span>№ {m} {c}</span></a>' for s, m, c, *_ in PRODUCTS)
 cat_cards = [card(p[0]) for p in PRODUCTS]
 editorial = '<div class="card ed"><div class="ph" data-ph="Фото 692×1035 · модель с расчёской, editorial (вставка на 2 колонки)"></div></div>'
 grid = cat_cards[0] + cat_cards[1] + editorial + cat_cards[2] + cat_cards[3] + cat_cards[4] + cat_cards[5]

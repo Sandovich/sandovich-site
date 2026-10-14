@@ -89,7 +89,8 @@ if (cgrid) {
   apply(fromHash());
 }
 
-// Квиз: модель — из вопроса о форме, цвет — из металла и акцента
+// Квиз: цвет — только по цветотипу (таблица по словарю Вады), модель — из ответа про темп.
+// Не знаете цветотип → два наводящих вопроса: подтон (металл) + контраст.
 const quiz = document.getElementById('quiz');
 if (quiz) {
   const NAMES = {
@@ -104,60 +105,58 @@ if (quiz) {
     '02-ruby': 'Ruby № 02: красный, которому хватает пары движений.',
     '02-pink': 'Pink: смелость, которая умеет улыбаться.',
   };
-  // Подбор: модель строго из ответа про темп, цвет — сумма очков за металл и акцент.
-  const SKUS = { '01': ['gold', 'silver', 'bronze', 'ruby'], '02': ['ruby', 'pink'] };
-  const METAL = { gold: { gold: 3 }, silver: { silver: 3 }, rose: { bronze: 3, pink: 1 }, none: {} };
-  const ACCENT = { red: { ruby: 3 }, pink: { pink: 3, bronze: 1 }, nude: { bronze: 2, gold: 1 }, black: { silver: 2, ruby: 1 } };
-  const score = (a, color) => {
-    const m = (METAL[a.metal] || {})[color] || 0;
-    const c = (ACCENT[a.accent] || {})[color] || 0;
-    return { m, c, total: m + c };
+  // Цветотип → цвета по модели, первый — главный.
+  const REC = {
+    spring: { '01': ['gold', 'bronze'], '02': ['pink'] },
+    summer: { '01': ['silver'], '02': ['pink'] },
+    autumn: { '01': ['bronze', 'gold'], '02': ['ruby'] },
+    winter: { '01': ['ruby', 'silver'], '02': ['ruby'] },
   };
-  // при равенстве очков побеждает вопрос, который поменяли последним
-  const pick = (a, last) => {
-    const models = a.model === '01' || a.model === '02' ? [a.model] : ['01', '02'];
-    let best = null;
-    for (const model of models) {
-      for (const color of SKUS[model]) {
-        const s = score(a, color);
-        // в сумку, если модель не выбрана, чуть ближе лёгкая № 02
-        const bonus = a.model === 'any' && a.place === 'bag' && model === '02' ? 0.5 : 0;
-        const total = s.total + bonus;
-        const lastPts = last === 'accent' ? s.c : s.m;
-        const cand = { sku: `${model}-${color}`, total, m: s.m, c: s.c, lastPts };
-        if (!best || total > best.total || (total === best.total && lastPts > best.lastPts)) best = cand;
-      }
-    }
-    return best;
+  const SEASON_WHY = {
+    spring: 'Весна: тёплый подтон, светлые краски.',
+    summer: 'Лето: холодный подтон, мягкие краски.',
+    autumn: 'Осень: тёплый подтон, глубокие краски.',
+    winter: 'Зима: холодный подтон, яркий контраст.',
   };
-  const why = (a, best) => {
-    const parts = [];
-    if (best.m > 0) parts.push('Под ваш металл.');
-    if (best.c > 0) parts.push('Под акцент в образе.');
-    if (a.model === '01' || a.model === '02') parts.push('Под ваш темп.');
-    if (a.place === 'gift') parts.push('Приходит в фирменной коробке, дарить можно сразу.');
-    else if (a.place) parts.push('Ей будет хорошо на виду.');
-    return parts.join(' ');
+  const FROM_HELP = { 'warm-light': 'spring', 'warm-deep': 'autumn', 'cool-light': 'summer', 'cool-deep': 'winter' };
+  const helpers = quiz.querySelectorAll('[data-help]');
+  const res = document.getElementById('qres');
+
+  const seasonOf = (a) => {
+    if (a.season && a.season !== 'unknown') return a.season;
+    if (a.season === 'unknown' && a.tone && a.depth) return FROM_HELP[`${a.tone}-${a.depth}`];
+    return null;
   };
-  let lastQ = 'metal';
-  quiz.addEventListener('change', (e) => {
-    if (e.target.name === 'metal' || e.target.name === 'accent') lastQ = e.target.name;
+
+  quiz.addEventListener('change', () => {
     const a = Object.fromEntries(new FormData(quiz));
-    if (Object.keys(a).length < 4) return;
-    const best = pick(a, lastQ);
-    const sku = best.sku;
-    const res = document.getElementById('qres');
+    helpers.forEach((f) => { f.hidden = a.season !== 'unknown'; });
+    const season = seasonOf(a);
+    if (!season || !a.model) { res.hidden = true; return; }
+    const model = a.model === '02' ? '02' : '01';
+    const colors = REC[season][model];
+    const sku = `${model}-${colors[0]}`;
+    const parts = [CHAR[sku], SEASON_WHY[season]];
+    if (season === 'spring' && model === '02') parts.push('Тёплого цвета в № 02 нет, Pink ближе всех по светлоте.');
+    if (a.model === '01' || a.model === '02') parts.push('Под ваш темп.');
     res.hidden = false;
     document.getElementById('qr-name').textContent = NAMES[sku];
-    document.getElementById('qr-num').textContent = sku.slice(0, 2);
-    document.getElementById('qr-why').textContent = `${CHAR[sku]} ${why(a, best)}`;
+    document.getElementById('qr-num').textContent = model;
+    document.getElementById('qr-why').textContent = parts.join(' ');
+    document.getElementById('qr-pic').src = `img/zya-${sku}-1.jpg`;
+    document.getElementById('qr-img').href = `product-${sku}.html`;
+    document.getElementById('qr-more').href = `product-${sku}.html`;
+    document.getElementById('qr-buy').href = zyaHref(SKU_ART[sku]);
+    const alt = document.getElementById('qr-alt');
+    alt.hidden = !colors[1];
+    if (colors[1]) {
+      const altSku = `${model}-${colors[1]}`;
+      const link = document.getElementById('qr-alt-a');
+      link.textContent = NAMES[altSku];
+      link.href = `product-${altSku}.html`;
+    }
     const card = res.querySelector('.qres-card');
     card.classList.remove('upd'); void card.offsetWidth; card.classList.add('upd');
-    document.getElementById('qr-img').href = `product-${sku}.html`;
-    document.getElementById('qr-img').dataset.ph = `Предметка 4:5 · ${NAMES[sku]}`;
-    document.getElementById('qr-more').href = `product-${sku}.html`;
-    const buy = document.getElementById('qr-buy');
-    buy.href = zyaHref(SKU_ART[sku]);
     if (!res.dataset.shown) { res.dataset.shown = '1'; res.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
   });
 }
