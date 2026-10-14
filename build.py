@@ -235,7 +235,7 @@ def _word(n):
     return 'отзыв' if n10 == 1 and n100 != 11 else 'отзыва' if 2 <= n10 <= 4 and not 12 <= n100 <= 14 else 'отзывов'
 def rev_card(r):
     return (f'<div class="rev"><div class="top"><span>{r["name"]}</span><span class="stars">★★★★★</span></div>'
-            f'<div class="txt">{r["text"]}</div><div class="dt">{fmt_d(r["date"])}</div></div>')
+            f'<div class="txt">{r["text"]}</div></div>')
 
 
 # ---------- Главная ----------
@@ -296,7 +296,7 @@ def product(sku):
   <div class="rs-bars">{''.join(f'<div><span>{k} ★</span><i><em style="width:{round(100 * rs["dist"][str(k)] / rs["n"])}%"></em></i><span>{fmt_n(rs["dist"][str(k)])}</span></div>' for k in (5, 4))}</div>
   <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a></div>
 </section>
-<section class="rlist page">{''.join(f'<div class="ritem"><div class="rh"><b>{r["name"]}</b><span class="stars">★★★★★</span><span class="rd">{fmt_d(r["date"])}</span></div><p>{r["text"]}</p></div>' for r in REV["sku"][s]["reviews"])}</section>
+<section class="rlist page">{''.join(f'<div class="ritem"><div class="rh"><b>{r["name"]}</b><span class="stars">★★★★★</span></div><p>{r["text"]}</p></div>' for r in REV["sku"][s]["reviews"])}</section>
 <section class="page" style="padding:60px var(--g) 92px">
   <h2 class="w36" style="text-align:center;margin-bottom:16px">Вам может понравиться…</h2>
   <div class="grid4">{''.join(card(o) for o in others)}</div>

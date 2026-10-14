@@ -79,7 +79,7 @@ if (rvdata) {
   const render = (reset) => {
     if (reset) { list.innerHTML = ''; shown = 0; }
     const part = items().slice(shown, shown + 20);
-    list.insertAdjacentHTML('beforeend', part.map((r) => `<div class="ritem"><div class="rh"><b>${esc(r.name)}</b><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</span><span class="rd">${d(r.date)}</span></div><p>${esc(r.text)}</p></div>`).join(''));
+    list.insertAdjacentHTML('beforeend', part.map((r) => `<div class="ritem"><div class="rh"><b>${esc(r.name)}</b><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</span></div><p>${esc(r.text)}</p></div>`).join(''));
     shown += part.length;
     more.hidden = shown >= items().length;
   };
