@@ -319,14 +319,14 @@ for p in PRODUCTS:
 
 # ---------- Квиз ----------
 QUIZ = [
-    ('Цветотип', 'Какой у вас цветотип?', 'Не знаете свой? Выберите «Не знаю», подскажем двумя вопросами.', 'season',
+    ('Цветотип', 'Какой у вас цветотип?', 'Сомневаетесь? Выберите «Не знаю»: хватит зеркала и двух вопросов.', 'season',
      [('spring', 'Весна', 's-spring'), ('summer', 'Лето', 's-summer'), ('autumn', 'Осень', 's-autumn'), ('winter', 'Зима', 's-winter'), ('unknown', 'Не знаю', 's-unknown')]),
     ('Темп', 'Что про вас?', 'Речь о характере, а не о расписании.', 'model',
      [('01', 'Собираюсь основательно', 'h-long'), ('02', 'Быстро и без суеты', 'h-short'), ('any', 'Бывает по-разному', 'h-any')]),
-    ('Подтон', 'Какой металл освежает лицо?', 'Приложите к лицу золотое и серебряное украшение. С каким кожа выглядит свежее?', 'tone',
+    ('Подтон', 'Золото или серебро?', 'Поднесите к лицу одно, потом другое. С каким вы выглядите так, будто выспались?', 'tone',
      [('warm', 'Золото', 'ring-g'), ('cool', 'Серебро', 'ring-s')]),
-    ('Контраст', 'Волосы и кожа рядом:', 'Посмотрите на себя без макияжа при дневном свете.', 'depth',
-     [('light', 'Светлые, мягкий контраст', 'd-light'), ('deep', 'Тёмные или яркий контраст', 'd-deep')]),
+    ('Контраст', 'Волосы и кожа вместе. Что видите?', 'Без макияжа, у окна, днём. Первое впечатление и есть ответ.', 'depth',
+     [('light', 'Светло и мягко', 'd-light'), ('deep', 'Глубоко или контрастно', 'd-deep')]),
 ]
 QICON = {
     's-spring': '<circle cx="20" cy="32" r="8" fill="#ffefae"/><circle cx="32" cy="32" r="8" fill="#eeb480"/><circle cx="44" cy="32" r="8" fill="#c5a56e"/>',
@@ -365,7 +365,7 @@ quiz_body = f'''<section class="quiz">
       <div class="qres-card">
         <a class="img ph has-img pack" id="qr-img" href="#"><img id="qr-pic" src="img/zya-01-gold-1.jpg" alt=""><div class="num"><i>№</i><b id="qr-num">01</b></div></a>
         <div><p class="w30" id="qr-name">№ 01 Золото</p><p class="qh" id="qr-why"></p>
-        <p class="qh" id="qr-alt" hidden>Ещё подойдёт: <a class="ulink" id="qr-alt-a" href="#"></a></p>
+        <p class="qh" id="qr-alt" hidden>Тоже ваш цвет: <a class="ulink" id="qr-alt-a" href="#"></a></p>
         <a class="btn btn-black zya" id="qr-buy" href="#">Купить в Золотом Яблоке</a>
         <a class="ulink" id="qr-more" href="#" style="display:inline-block;margin-top:18px">Подробнее о расчёске</a></div>
       </div>

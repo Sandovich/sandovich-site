@@ -143,10 +143,10 @@ if (quiz) {
     winter: { '01': ['ruby', 'silver'], '02': ['ruby'] },
   };
   const SEASON_WHY = {
-    spring: 'Весна: тёплый подтон, светлые краски.',
-    summer: 'Лето: холодный подтон, мягкие краски.',
-    autumn: 'Осень: тёплый подтон, глубокие краски.',
-    winter: 'Зима: холодный подтон, яркий контраст.',
+    spring: 'Весна тёплая и светлая, ей к лицу солнечный блеск.',
+    summer: 'Лето прохладное и мягкое, ему идёт блеск без нажима.',
+    autumn: 'Осень тёплая и глубокая, как металл в свете свечи.',
+    winter: 'Зима холодная и контрастная, полутона ей скучны.',
   };
   const FROM_HELP = { 'warm-light': 'spring', 'warm-deep': 'autumn', 'cool-light': 'summer', 'cool-deep': 'winter' };
   const helpers = quiz.querySelectorAll('[data-help]');
@@ -167,7 +167,7 @@ if (quiz) {
     const colors = REC[season][model];
     const sku = `${model}-${colors[0]}`;
     const parts = [CHAR[sku], SEASON_WHY[season]];
-    if (season === 'spring' && model === '02') parts.push('Тёплого цвета в № 02 нет, Pink ближе всех по светлоте.');
+    if (season === 'spring' && model === '02') parts.push('В № 02 тёплых оттенков нет, но Pink такая же светлая, как вы.');
     if (a.model === '01' || a.model === '02') parts.push('Под ваш темп.');
     res.hidden = false;
     document.getElementById('qr-name').textContent = NAMES[sku];
