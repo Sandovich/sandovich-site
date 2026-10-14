@@ -3,3 +3,4 @@ pairs/
 *.jpg
 __pycache__/
 !img/*.jpg
+img/p-*.jpg

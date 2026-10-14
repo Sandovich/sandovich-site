@@ -416,7 +416,7 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 .ph.pack>img{object-fit:cover}
 .mg-feat .ph.has-img .w28,.s-full .ph.has-img~.ov{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .qb[hidden]{display:none}
-.hero .ph.has-img>img{object-position:50% 52%}
+.hero .ph.has-img>img{object-position:50% 45%}
 .s-full .ph.has-img>img{object-position:50% 50%}
 /* затемнение снизу, чтобы белые заголовки читались на светлых фото */
 .ph.has-img:not(.pack)::after{display:block;content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(0,0,0,.42),rgba(0,0,0,0) 55%)}
