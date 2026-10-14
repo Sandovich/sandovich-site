@@ -70,7 +70,7 @@ def mega_links(items):
 
 BRUSH_LINKS = [('Модель № 01', 'catalog.html#m01'), ('Модель № 02', 'catalog.html#m02'), ('Все расчёски', 'catalog.html'), ('В подарок', 'catalog.html#gift')]
 COLOR_LINKS = [(f'№ {m} {c}', f'product-{s}.html') for s, m, c, *_ in PRODUCTS]
-ABOUT_LINKS = [('О бренде', 'index.html#about'), ('Ритуал', 'index.html#ritual'), ('Вопросы и ответы', 'index.html#faq'), ('Где купить', '#')]
+ABOUT_LINKS = [('О бренде', 'index.html#about'), ('Ритуал', 'index.html#ritual'), ('Вопросы и ответы', 'index.html#faq'), ('Где купить', 'https://goldapple.ru/volosy/aksessuary/rascheski?brandobjectid=1913789')]
 
 
 def header(active=''):
