@@ -166,8 +166,8 @@ img{display:block}
 /* 18. соцсети */
 .s-soc{padding-top:54px}
 .s-soc h2{font:800 19.6px/25.48px var(--wilma);letter-spacing:.6px;text-transform:uppercase;text-align:center;margin-bottom:29px}
-.soc{display:flex;gap:10px;overflow:hidden}
-.soc .ph{flex:0 0 270px;height:361px}
+.soc{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.soc .ph{height:auto;aspect-ratio:270/361}
 
 /* 19. футер */
 .ftr{background:var(--milk);padding:36px var(--g) 30px}
@@ -377,7 +377,8 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
   .s-seo{padding:48px 0}
   .s-seo .in{width:auto}
   .s-seo h3{font-size:16px;line-height:20px}
-  .soc .ph{flex-basis:174px;height:232px}
+  .soc{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -16px;padding:0 16px}.soc::-webkit-scrollbar{display:none}
+  .soc .ph{flex:0 0 62%;height:auto;scroll-snap-align:start}
   .fgrid{grid-template-columns:1fr;row-gap:36px;margin-top:8px}
   .s-best .grid4{grid-template-columns:repeat(4,55%);overflow-x:auto;scroll-snap-type:x mandatory}
   .s-best .card{scroll-snap-align:start}

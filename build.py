@@ -291,7 +291,6 @@ def product(sku):
     <div class="tiles">{tiles}</div>
     <a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a>
     <p class="pnote">Артикул {art} · в фирменной коробке</p>
-    <div class="stories">{''.join(f'<div class="st"><div class="ph" data-ph="Видео"></div><span>{t}</span></div>' for t in ['Как расчёсываться', 'Шесть цветов', 'Упаковка', 'Отзывы'])}</div>
     <div class="pdiag"><p><b>Сомневаетесь в цвете?</b></p><p>Подбор по цветотипу: пара вопросов о вас.</p><a class="btn btn-outline" href="quiz.html">Пройти подбор</a></div>
     <div class="paccs">{accs}</div>
   </div></aside>
