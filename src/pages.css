@@ -1,0 +1,135 @@
+
+/* ---------- общие дополнения ---------- */
+button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
+.tab{background:none;border:0;cursor:pointer;padding:0}
+.w28{font:800 28px/32px var(--wilma);letter-spacing:.6px;text-transform:uppercase}
+.w30{font:800 30px/32px var(--wilma);letter-spacing:.6px;text-transform:uppercase}
+.w56{font:800 56px/54px var(--wilma);letter-spacing:.6px;text-transform:uppercase}
+.w56c{font:800 56px/58px var(--wilma);letter-spacing:.6px;text-transform:uppercase;text-align:center}
+.btn-outline{border:2px solid #000;height:46px;width:100%}
+.sw-l a{width:10px;height:10px;border-radius:50%;margin-right:16px;background:var(--c);display:block}
+.sw-l a.sel{width:18px;height:18px;border:2px solid #000;background:var(--c) content-box;padding:2px;margin-left:-4px;margin-right:12px}
+.nav li a{display:block;padding-bottom:2px;border-bottom:1px solid transparent}
+.nav li:hover a,.nav li.on a{border-bottom-color:#000}
+.icons a,.icons button{display:flex}
+
+/* мега-меню (замеры: фото слева 320×400, списки 15 px с отступом 30) */
+.hdr{position:relative}
+.mega{position:absolute;left:80px;right:0;top:68px;background:#fff;display:none;gap:48px;padding:24px 32px 34px;box-shadow:0 20px 30px -24px rgba(0,0,0,.25);z-index:5}
+.mega.open{display:flex}
+.mg-feat{width:320px;position:relative}
+.mg-feat .ph{height:400px}
+.mg-feat .w28{position:absolute;left:0;top:-4px;right:0;z-index:1;color:#000;padding-right:40px}
+.mg-feat .ph::after{top:auto;bottom:12px}
+.mg-feat .ulink{display:inline-block;margin-top:16px}
+.mg-h{font:500 14px/18.2px var(--futura);letter-spacing:.6px;margin:6px 0 14px}
+.mg-col ul{list-style:none;padding-left:30px}
+.mg-col li{font:400 15px/30px var(--futura);letter-spacing:.6px}
+.mg-col li a:hover{text-decoration:underline}
+
+/* мобильное меню */
+.drawer{position:fixed;inset:0;background:#fff;z-index:50;padding:0 16px 24px;overflow:auto}
+.drawer[hidden]{display:none}
+.dr-top{height:56px;display:flex;align-items:center;justify-content:space-between}
+.dr-top .logo{font-size:20px;letter-spacing:2.4px;width:auto}
+.dr-close svg{width:24px;height:24px}
+.dr-menu{list-style:none;margin-top:16px}
+.dr-menu>li{border-bottom:1px solid #000;font:400 13px/22px var(--futura);letter-spacing:2.1px;text-transform:uppercase}
+.dr-menu>li>a,.dr-menu summary{display:flex;justify-content:space-between;padding:16px 0;list-style:none}
+.dr-menu summary::-webkit-details-marker{display:none}
+.dr-menu ul{list-style:none;padding:0 0 14px 16px;text-transform:none;letter-spacing:.6px;font-size:15px;line-height:32px}
+.dr-buy{width:100%;margin-top:28px}
+
+/* хлебные крошки (12/16, #757575) */
+.crumbs{display:flex;gap:8px;padding-top:12px;padding-bottom:16px;font:400 12px/16px var(--futura);letter-spacing:.24px;color:#757575}
+.crumbs a{text-decoration:underline}
+
+/* ---------- карточка товара (замеры: галерея 766, колонка 460 на молочном) ---------- */
+.pdp{display:grid;grid-template-columns:766px 1fr;gap:0;align-items:start}
+.gallery{display:flex;flex-direction:column;gap:16px}
+.g2{display:grid;grid-template-columns:375px 375px;gap:16px}.g2 .ph{height:468px}
+.g3{display:grid;grid-template-columns:245px 245px 245px;gap:15px}.g3 .ph{height:306px}
+.buy{background:var(--milk);position:sticky;top:0}
+.buy-in{width:460px;margin:0 auto;padding:137px 0 64px}
+.prate{display:flex;align-items:center;gap:10px;font:400 14px/16px var(--futura);letter-spacing:.32px}
+.prate .ulink{font-size:12px;letter-spacing:1.8px}
+.ptitle{display:flex;align-items:flex-start;gap:12px;margin-top:20px}
+.ptitle .num{position:static;flex:0 0 auto;margin-top:4px}
+.ptitle h1{font:400 18px/26px var(--futura);letter-spacing:.64px}
+.pprice{font:400 18px/22px var(--futura);letter-spacing:.48px;margin-top:12px}
+.tiles{display:grid;grid-template-columns:repeat(7,60px);gap:4px;margin-top:29px}
+.tiles a{height:71px;background:#F1EEEA;display:flex;align-items:center;justify-content:center;border-bottom:1px solid transparent}
+.tiles a.on{border-bottom-color:#000}
+.tiles span{width:12px;height:52px;border-radius:6px 6px 4px 4px}
+.buy .btn-black{width:100%;margin-top:28px}
+.pnote{font:400 12px/14px var(--futura);letter-spacing:.24px;text-align:center;margin-top:16px}
+.stories{display:flex;gap:11px;margin-top:51px;overflow-x:auto}
+.st{flex:0 0 129px;text-align:center}
+.st .ph{height:129px}
+.st span{display:block;font:600 13px/13px var(--futura);letter-spacing:.6px;margin-top:6px}
+.pdiag{margin-top:52px;padding:0 6px}
+.pdiag p{font:400 14px/25.2px var(--futura)}
+.pdiag b{font-weight:500}
+.pdiag .btn-outline{margin-top:16px}
+.paccs{margin-top:48px;border-top:1px solid #000}
+.pacc{border-bottom:1px solid #000}
+.pacc summary{display:flex;align-items:center;gap:14px;height:55px;padding-left:7px;font:400 13px/18px var(--futura);letter-spacing:2.8px;text-transform:uppercase;cursor:pointer;list-style:none}
+.pacc summary::-webkit-details-marker{display:none}
+.pacc .pl{font:400 18px/18px var(--futura);letter-spacing:0;width:12px}
+.pacc .a{padding:0 28px 22px;font:400 14px/22px var(--futura);letter-spacing:.32px}
+.rsum{display:flex;justify-content:center;align-items:center;gap:40px;padding-top:80px;padding-bottom:40px}
+.rs-avg{display:flex;align-items:center;gap:12px;padding-right:40px}
+.rs-avg b{font:400 48px/1 var(--garamond)}
+.rs-avg p{font:400 14px/18px var(--futura);margin-top:4px}
+.rs-bars{border-left:1px solid #ddd;border-right:1px solid #ddd;padding:0 40px}
+.rs-bars div{display:flex;align-items:center;gap:14px;font:400 14px/25px var(--futura)}
+.rs-bars i{width:140px;height:4px;background:#e6e6e6;display:block;border-radius:2px}
+.rs-bars em{display:block;height:4px;background:#000;border-radius:2px}
+.rs-cta .btn-black{height:38px;border-radius:19px;padding:0 22px;text-transform:none;letter-spacing:.3px;font-size:13px}
+.rlist{max-width:1252px;margin:0 auto}
+.ritem{border-top:1px solid #e6e6e6;padding:28px 214px}
+.rh{display:flex;gap:16px;align-items:center;font:400 14px/20px var(--futura)}
+.rh .rd{margin-left:auto;color:#757575;font-size:12px}
+.ritem p{font:400 15px/22px var(--garamond);margin-top:10px;color:#555}
+
+/* ---------- квиз (замеры: фото 585×877 слева, вопросы 640 справа, иконки 64) ---------- */
+.quiz{display:grid;grid-template-columns:585px 640px;gap:59px;padding:0 24px 0 48px;align-items:start}
+.qimg{position:sticky;top:0;height:877px}
+.qimg .ph{position:absolute;inset:0}
+.qimg .w56{position:absolute;left:32px;bottom:40px;color:#fff;z-index:1}
+.qform{padding:72px 0 120px}
+.qb{border:0;margin-bottom:61px}
+.qb legend{padding:0}
+.qq{font:400 13px/20px var(--futura);letter-spacing:.32px;margin-top:2px}
+.qh{font:400 13px/20px var(--futura);letter-spacing:.32px;color:#757575;margin-top:4px}
+.qopts{display:flex;gap:24px;margin-top:24px}
+.qo{width:140px;display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;font:400 14px/25.2px var(--futura);position:relative}
+.qo input{position:absolute;opacity:0;pointer-events:none}
+.qi{width:64px;height:64px;border-radius:50%;background:#F1E6E4;display:flex;align-items:center;justify-content:center;border:1px solid transparent;margin-bottom:8px}
+.qi svg{width:64px;height:64px}
+.qo input:checked+.qi{border-color:#000;background:var(--powder)}
+.qo input:focus-visible+.qi{outline:2px solid #000;outline-offset:2px}
+.qres{border-top:1px solid #000;padding-top:32px}
+.qres-card{display:grid;grid-template-columns:240px 1fr;gap:32px;margin-top:16px;align-items:center}
+.qres-card .img{position:relative;aspect-ratio:4/5;border-bottom:1px solid #000;display:block}
+.qres-card .num{left:12px}
+.qres-card .btn-black{width:100%;margin-top:22px}
+
+/* ---------- каталог (замеры: h1 56, истории 129, табы 12/14, сетка 342 + вставка 692×1035) ---------- */
+.cat{padding-top:52px}
+.stories-row{display:flex;justify-content:center;gap:11px;margin:12px 0 56px}
+.story{width:129px;text-align:center}
+.story .ph{height:129px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.story span{display:block;font:600 12px/12px var(--futura);letter-spacing:.6px;margin-top:2px}
+.ctabs{display:flex;gap:24px;border-bottom:1px solid #000;margin-top:44px;padding-bottom:13px;overflow-x:auto;white-space:nowrap}
+.ctabs a{font:400 12px/14px var(--futura);letter-spacing:1.8px;text-transform:uppercase;color:#757575}
+.ctabs a.on{font-weight:700;color:#000}
+.cbar{display:flex;align-items:center;gap:24px;font:400 12px/14px var(--futura);letter-spacing:1px;color:rgba(0,0,0,.85);margin:22px 0 7px}
+.cbar .sort{margin-left:auto;letter-spacing:1.8px}
+.cbar .sort b{font-weight:400;margin-left:14px}
+.cbar .cnt{margin-left:120px;color:#000}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;row-gap:24px;padding-bottom:92px}
+.cgrid .ed{grid-column:3/5;grid-row:1/3}
+.cgrid .ed .ph{height:100%;min-height:600px}
+.card[hidden]{display:none}
+.card .ph::after{right:110px}

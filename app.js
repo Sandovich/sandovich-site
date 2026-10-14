@@ -1,0 +1,130 @@
+// SANDÓVICH — поведение сайта (без библиотек)
+
+// Ссылки на Золотое Яблоко: заполнить, когда появятся карточки товаров.
+// Пока пусто — кнопки ведут на общий поиск ЗЯ по бренду.
+const ZYA_SEARCH = 'https://goldapple.ru/catalogsearch/result?q=sandovich';
+const ZYA_LINKS = {
+  HBSG01: '', HBSS01: '', HBSB01: '', HBSR01: '', HBSR02: '', HBSP02: '',
+};
+const SKU_ART = {
+  '01-gold': 'HBSG01', '01-silver': 'HBSS01', '01-bronze': 'HBSB01',
+  '01-ruby': 'HBSR01', '02-ruby': 'HBSR02', '02-pink': 'HBSP02',
+};
+
+const zyaHref = (art) => (art && ZYA_LINKS[art]) || ZYA_SEARCH;
+document.querySelectorAll('.zya').forEach((a) => {
+  a.href = zyaHref(a.dataset.sku);
+  a.target = '_blank';
+  a.rel = 'noopener';
+});
+
+// Табы на главной
+document.querySelectorAll('[data-tab]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-tab]').forEach((b) => b.classList.replace('on', 'off'));
+    btn.classList.replace('off', 'on');
+    document.querySelectorAll('.tabpanel').forEach((p) => { p.hidden = p.id !== btn.dataset.tab; });
+  });
+});
+
+// Мега-меню (десктоп, по наведению)
+const megas = document.querySelectorAll('.mega');
+let megaTimer;
+const closeMegas = () => megas.forEach((m) => m.classList.remove('open'));
+document.querySelectorAll('.nav li[data-mega]').forEach((li) => {
+  const mega = document.getElementById(li.dataset.mega);
+  const open = () => { clearTimeout(megaTimer); closeMegas(); mega.classList.add('open'); };
+  const close = () => { megaTimer = setTimeout(closeMegas, 150); };
+  li.addEventListener('mouseenter', open);
+  li.addEventListener('mouseleave', close);
+  mega.addEventListener('mouseenter', () => clearTimeout(megaTimer));
+  mega.addEventListener('mouseleave', close);
+});
+document.querySelectorAll('.nav li:not([data-mega])').forEach((li) => li.addEventListener('mouseenter', closeMegas));
+
+// Мобильное меню
+const drawer = document.getElementById('drawer');
+document.querySelector('.burger')?.addEventListener('click', () => { drawer.hidden = false; document.body.style.overflow = 'hidden'; });
+document.querySelector('.dr-close')?.addEventListener('click', () => { drawer.hidden = true; document.body.style.overflow = ''; });
+
+// Стрелки отзывов
+document.querySelectorAll('[data-scroll]').forEach((box) => {
+  const track = document.querySelector(box.dataset.scroll);
+  const [prev, next] = box.querySelectorAll('svg');
+  const step = () => track.firstElementChild.getBoundingClientRect().width;
+  prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+});
+
+// «+» → «−» у раскрывающихся вопросов
+document.querySelectorAll('details').forEach((d) => {
+  d.addEventListener('toggle', () => {
+    const s = d.querySelector('summary span');
+    if (s) s.textContent = d.open ? '−' : '+';
+  });
+});
+
+// Каталог: фильтр по табам и якорям (#m01, #m02, #gift)
+const cgrid = document.getElementById('cgrid');
+if (cgrid) {
+  const apply = (f) => {
+    let n = 0;
+    cgrid.querySelectorAll('.card').forEach((c) => {
+      if (c.classList.contains('ed')) { c.hidden = f !== 'all'; return; }
+      const sku = c.querySelector('a').getAttribute('href').replace('product-', '').replace('.html', '');
+      const show = f === 'all' || f === 'gift' || sku.startsWith(f);
+      c.hidden = !show; if (show) n += 1;
+    });
+    document.getElementById('cnt').textContent = `${n} ${n === 1 ? 'расчёска' : n < 5 ? 'расчёски' : 'расчёсок'}`;
+    document.querySelectorAll('.ctabs a').forEach((a) => a.classList.toggle('on', a.dataset.f === f));
+  };
+  const fromHash = () => ({ '#m01': '01', '#m02': '02', '#gift': 'gift' }[location.hash] || 'all');
+  document.querySelectorAll('.ctabs a').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); history.replaceState(null, '', a.getAttribute('href')); apply(a.dataset.f); }));
+  window.addEventListener('hashchange', () => apply(fromHash()));
+  apply(fromHash());
+}
+
+// Квиз: модель — из вопроса о форме, цвет — из металла и акцента
+const quiz = document.getElementById('quiz');
+if (quiz) {
+  const NAMES = {
+    '01-gold': '№ 01 Золото', '01-silver': '№ 01 Серебро', '01-bronze': '№ 01 Бронза',
+    '01-ruby': '№ 01 Рубин', '02-ruby': '№ 02 Рубин', '02-pink': '№ 02 Розовая',
+  };
+  const pick = (a) => {
+    let model = a.model === '02' ? '02' : '01';
+    let color;
+    if (a.accent === 'pink') { model = '02'; color = 'pink'; }
+    else if (a.accent === 'red') color = 'ruby';
+    else if (a.metal === 'gold') color = 'gold';
+    else if (a.metal === 'silver') color = 'silver';
+    else if (a.metal === 'rose') color = 'bronze';
+    else color = a.accent === 'black' ? 'silver' : 'gold';
+    if (model === '02' && !['ruby', 'pink'].includes(color)) color = a.accent === 'nude' ? 'pink' : 'ruby';
+    return `${model}-${color}`;
+  };
+  const why = (a, sku) => {
+    const parts = [];
+    if (a.metal && a.metal !== 'none') parts.push('подходит к вашим украшениям');
+    if (a.accent) parts.push('поддерживает акцент в образе');
+    if (a.place === 'gift') parts.push('приходит в фирменной коробке — можно дарить без обёртки');
+    else if (a.place === 'bag') parts.push(sku.startsWith('02') ? 'короткая — удобно носить в сумке' : 'помещается в сумку');
+    return parts.length ? `Почему: ${parts.join(', ')}.` : '';
+  };
+  quiz.addEventListener('change', () => {
+    const a = Object.fromEntries(new FormData(quiz));
+    if (Object.keys(a).length < 4) return;
+    const sku = pick(a);
+    const res = document.getElementById('qres');
+    res.hidden = false;
+    document.getElementById('qr-name').textContent = NAMES[sku];
+    document.getElementById('qr-num').textContent = sku.slice(0, 2);
+    document.getElementById('qr-why').textContent = why(a, sku);
+    document.getElementById('qr-img').href = `product-${sku}.html`;
+    document.getElementById('qr-img').dataset.ph = `Предметка 4:5 · ${NAMES[sku]}`;
+    document.getElementById('qr-more').href = `product-${sku}.html`;
+    const buy = document.getElementById('qr-buy');
+    buy.href = zyaHref(SKU_ART[sku]);
+    res.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}

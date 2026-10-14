@@ -1,0 +1,4 @@
+test_shots/
+pairs/
+*.jpg
+__pycache__/

@@ -1,0 +1,283 @@
+# Сборка сайта SANDÓVICH (копия структуры labonnebrosse.com 1:1):
+#   python -X utf8 build.py  →  index.html, catalog.html, quiz.html, product-<sku>.html
+# Общие части (head, шапка, мега-меню, мобильное меню, подвал) — здесь; стили — style.css; поведение — app.js.
+# Тексты черновые; [в квадратных скобках] — то, что нужно уточнить/заполнить.
+
+ZYA_NOTE = 'Ссылки на карточки Золотого Яблока — заполнить в app.js (ZYA_LINKS)'
+
+PRODUCTS = [
+    # sku, модель, цвет (им. п.), цвет для заголовка, hex, артикул, бейдж
+    ('01-gold',   '01', 'Золото',  'Золото',  '#C9A25A', 'HBSG01', 'Хит'),
+    ('01-silver', '01', 'Серебро', 'Серебро', '#C7C9CE', 'HBSS01', ''),
+    ('01-bronze', '01', 'Бронза',  'Бронза',  '#B4785A', 'HBSB01', ''),
+    ('01-ruby',   '01', 'Рубин',   'Рубин',   '#9E1B2A', 'HBSR01', 'Новый цвет'),
+    ('02-ruby',   '02', 'Рубин',   'Рубин',   '#9E1B2A', 'HBSR02', 'Новинка'),
+    ('02-pink',   '02', 'Розовая', 'Розовая', '#EBA3C3', 'HBSP02', 'Хит'),
+]
+MODEL = {
+    '01': dict(name='№ 01', hand='длинной тонкой ручкой', size='Длина 19 см, ширина головки 4 см.'),
+    '02': dict(name='№ 02', hand='короткой широкой ручкой', size='[Размеры № 02 — уточнить.]'),
+}
+
+ICON = dict(
+    search='<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.3"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>',
+    pin='<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.3"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>',
+    bag='<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.3"><path d="M5 8h14l-1 13H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    burger='<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.3"><path d="M3 7h18M3 12h18M3 17h18"/></svg>',
+    close='<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.3"><path d="M5 5l14 14M19 5 5 19"/></svg>',
+    arrow='<svg width="12" height="10" viewBox="0 0 12 10" fill="none" stroke="#000" stroke-width="1.2"><path d="M0 5h11M7 1l4 4-4 4"/></svg>',
+)
+
+
+def head(title, desc):
+    return f'''<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<meta name="description" content="{desc}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Tenor+Sans&family=Roboto+Condensed:wght@800&family=EB+Garamond:wght@500&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+'''
+
+
+def mega_links(items):
+    return ''.join(f'<li><a href="{h}">{t}</a></li>' for t, h in items)
+
+
+BRUSH_LINKS = [('Модель № 01', 'catalog.html#m01'), ('Модель № 02', 'catalog.html#m02'), ('Все расчёски', 'catalog.html'), ('В подарок', 'catalog.html#gift')]
+COLOR_LINKS = [(f'№ {m} {c}', f'product-{s}.html') for s, m, c, *_ in PRODUCTS]
+ABOUT_LINKS = [('О бренде', 'index.html#about'), ('Ритуал', 'index.html#ritual'), ('Вопросы и ответы', 'index.html#faq'), ('Где купить', '#')]
+
+
+def header(active=''):
+    def li(key, text, href, mega=''):
+        cls = ' class="on"' if key == active else ''
+        return f'<li{cls} data-mega="{mega}"><a href="{href}">{text}</a></li>' if mega else f'<li{cls}><a href="{href}">{text}</a></li>'
+    return f'''<div class="ann"><a href="#" class="zya">Продаётся в Золотом Яблоке · Найти магазин</a>{ICON['arrow']}</div>
+<header class="hdr">
+  <a class="logo" href="index.html">SANDÓVICH</a>
+  <nav class="nav">
+    <ul>
+      {li('new', 'Новинки', 'product-02-ruby.html')}
+      {li('brushes', 'Расчёски', 'catalog.html', 'mg-brush')}
+      {li('ritual', 'Ритуал', 'index.html#ritual')}
+      {li('quiz', 'Подбор', 'quiz.html')}
+      {li('gift', 'В подарок', 'catalog.html#gift')}
+      {li('about', 'О бренде', 'index.html#about', 'mg-about')}
+    </ul>
+    <div class="icons">
+      <a href="catalog.html" aria-label="Поиск">{ICON['search']}</a>
+      <a href="#" class="zya" aria-label="Где купить">{ICON['pin']}</a>
+      <a href="#" class="zya" aria-label="Купить в Золотом Яблоке">{ICON['bag']}</a>
+      <button class="burger" aria-label="Меню">{ICON['burger']}</button>
+    </div>
+  </nav>
+  <div class="mega" id="mg-brush">
+    <a class="mg-feat" href="quiz.html"><div class="ph" data-ph="Фото 320×400 · модель с расчёсками у лица"><div class="w28">Какая расчёска ваша?</div></div><span class="ulink">Подобрать расчёску →</span></a>
+    <div class="mg-col"><p class="mg-h">Расчёски</p><ul>{mega_links(BRUSH_LINKS)}</ul></div>
+    <div class="mg-col"><p class="mg-h">По цвету</p><ul>{mega_links(COLOR_LINKS)}</ul></div>
+  </div>
+  <div class="mega" id="mg-about">
+    <a class="mg-feat" href="index.html#ritual"><div class="ph" data-ph="Фото 320×400 · ритуал расчёсывания"><div class="w28">Ритуал</div></div><span class="ulink">Читать →</span></a>
+    <div class="mg-col"><p class="mg-h">SANDÓVICH</p><ul>{mega_links(ABOUT_LINKS)}</ul></div>
+  </div>
+</header>
+<div class="drawer" id="drawer" hidden>
+  <div class="dr-top"><a class="logo" href="index.html">SANDÓVICH</a><button class="dr-close" aria-label="Закрыть">{ICON['close']}</button></div>
+  <ul class="dr-menu">
+    <li><a href="product-02-ruby.html">Новинки</a></li>
+    <li><details><summary>Расчёски<span>+</span></summary><ul>{mega_links(BRUSH_LINKS + COLOR_LINKS)}</ul></details></li>
+    <li><a href="index.html#ritual">Ритуал</a></li>
+    <li><a href="quiz.html">Подбор</a></li>
+    <li><a href="catalog.html#gift">В подарок</a></li>
+    <li><details><summary>О бренде<span>+</span></summary><ul>{mega_links(ABOUT_LINKS)}</ul></details></li>
+  </ul>
+  <a class="btn btn-black zya dr-buy" href="#">Купить в Золотом Яблоке</a>
+</div>
+'''
+
+
+FOOTER = '''<footer class="ftr">
+  <div class="seal">S.</div>
+  <div class="fgrid">
+    <div><div class="t">Сообщество SANDÓVICH</div><div class="s">Новинки, подборки и закрытые предложения — в нашем Telegram</div><a class="btn btn-lav" href="https://t.me/sandovich_official">Подписаться в Telegram</a></div>
+    <div><h5>Нужна помощь?</h5><ul><li><a href="index.html#faq">Вопросы и ответы</a></li><li><a href="index.html#faq">Как ухаживать за расчёской</a></li><li><a href="#" class="zya">Где купить</a></li><li><a href="mailto:hello@sandovich.ru">Связаться с нами</a></li><li><a href="index.html#reviews">Отзывы покупателей</a></li></ul></div>
+    <div><h5>Правовая информация</h5><ul><li><a href="#">Политика конфиденциальности</a></li><li><a href="#">Согласие на обработку данных</a></li><li><a href="#">Реквизиты</a></li></ul></div>
+    <div><p class="follow">Мы в соцсетях</p><div class="soci">
+      <a href="https://t.me/sandovich_official" aria-label="Telegram"><svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M21.5 3.6 2.9 10.8c-1.3.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5zM9.7 14.6l-.4 4-1.5-4.8 10.4-6.6-8.5 7.4z"/></svg></a>
+      <a href="#" aria-label="ВКонтакте"><svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M12.8 17.3c-5.6 0-8.8-3.8-8.9-10.2h2.8c.1 4.7 2.2 6.6 3.8 7V7.1h2.6v4c1.6-.2 3.3-2 3.8-4h2.6c-.4 2.5-2.2 4.3-3.5 5.1 1.3.6 3.4 2.2 4.2 5.1h-2.9c-.6-1.9-2.2-3.4-4.2-3.6v3.6h-.3z"/></svg></a>
+    </div></div>
+  </div>
+  <div class="zya-line">Продаётся в Золотом Яблоке</div>
+  <p class="copy">© 2026 SANDÓVICH</p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
+'''
+
+
+def page(fname, title, desc, body, active=''):
+    open(fname, 'w', encoding='utf-8').write(head(title, desc) + header(active) + body + '\n' + FOOTER)
+    print('ok', fname)
+
+
+def swatch_dots(model, sel_sku):
+    out = ''
+    for s, m, c, _, hexc, *_ in PRODUCTS:
+        if m != model:
+            continue
+        cls = ' class="sel"' if s == sel_sku else ''
+        out += f'<a{cls} href="product-{s}.html" title="{c}" style="--c:{hexc}"></a>'
+    return out
+
+
+def card(sku, ph=None):
+    s, m, c, _, hexc, art, badge = next(p for p in PRODUCTS if p[0] == sku)
+    ph = ph or f'Предметка 4:5 · № {m} {c.lower()}, бежевая драпировка'
+    b = f'<span class="badge">{badge}</span>' if badge else ''
+    return f'''<div class="card"><a class="img ph" href="product-{s}.html" data-ph="{ph}">{b}<div class="num"><i>№</i><b>{m}</b></div></a>
+      <div class="info"><a class="name" href="product-{s}.html">№ {m} Массажная расчёска {c}</a><div class="price">В Золотом Яблоке</div>
+      <div class="sw sw-l">{swatch_dots(m, s)}</div></div></div>
+'''
+
+
+# ---------- Главная ----------
+home = open('src/home.html', encoding='utf-8').read()
+page('index.html', 'SANDÓVICH — массажные расчёски, которые не прячут',
+     'Массажные расчёски SANDÓVICH: две модели, шесть цветов. Продаются в Золотом Яблоке.', home)
+
+
+# ---------- Карточка товара ----------
+def product(sku):
+    s, m, c, _, hexc, art, badge = next(p for p in PRODUCTS if p[0] == sku)
+    md = MODEL[m]
+    tiles = ''
+    for s2, m2, c2, _, hex2, *_ in PRODUCTS:
+        if m2 != m:
+            continue
+        cls = ' class="on"' if s2 == s else ''
+        tiles += f'<a{cls} href="product-{s2}.html" title="{c2}"><span style="background:{hex2}"></span></a>'
+    gal = lambda w, h, t: f'<div class="ph" data-ph="Фото {w}×{h} · {t}"></div>'
+    acc = [
+        ('Описание', f'Массажная расчёска SANDÓVICH {md["name"]} с {md["hand"]}, цвет — {c.lower()}. Расчёска, которую не прячут: на туалетном столике, в сумке, на полке в ванной.'),
+        ('Как пользоваться', 'Начинайте с кончиков и поднимайтесь к корням, не тяните спутанные пряди. Пару минут утром и вечером — и расчёсывание становится ритуалом.'),
+        ('Материалы', 'Корпус — ABS-пластик, щетина — нейлон.'),
+        ('Размеры', md['size']),
+        ('Уход', 'Убирайте волосы со щетины после каждого использования. Раз в неделю промойте тёплой водой с мягким шампунем и высушите щетиной вниз.'),
+        ('Где купить', 'В Золотом Яблоке — в магазинах и на сайте. Кнопка «Купить» откроет карточку товара в Золотом Яблоке.'),
+    ]
+    accs = ''.join(f'<details class="pacc"><summary><span class="pl">+</span>{t}</summary><div class="a">{a}</div></details>' for t, a in acc)
+    others = [p[0] for p in PRODUCTS if p[0] != s][:4]
+    body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><span>›</span><a href="catalog.html">Расчёски</a><span>›</span><span>№ {m} Массажная расчёска {c}</span></nav>
+<section class="pdp page">
+  <div class="gallery">
+    <div class="g2">{gal(375, 468, f'№ {m} {c.lower()}, вид сбоку и анфас, бежевая драпировка')}{gal(375, 468, 'расчёска в руке, крупно, editorial')}</div>
+    <div class="g3">{gal(245, 306, 'вид сбоку')}{gal(245, 306, 'щетина крупно')}{gal(245, 306, 'в руке у модели')}</div>
+    <div class="g2">{gal(375, 468, 'деталь ручки с тиснением')}{gal(375, 468, 'расчёска с фирменной коробкой')}</div>
+  </div>
+  <aside class="buy"><div class="buy-in">
+    <div class="prate">Х,Х <span class="stars">★★★★★</span> <a href="#reviews" class="ulink">ХХ отзывов</a></div>
+    <div class="ptitle"><div class="num"><i>№</i><b>{m}</b></div><h1>№ {m} Массажная расчёска {c}</h1></div>
+    <div class="pprice">В Золотом Яблоке</div>
+    <div class="tiles">{tiles}</div>
+    <a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a>
+    <p class="pnote">Артикул {art} · доставка и самовывоз — через Золотое Яблоко</p>
+    <div class="stories">{''.join(f'<div class="st"><div class="ph" data-ph="Видео"></div><span>{t}</span></div>' for t in ['Как расчёсываться', 'Шесть цветов', 'Упаковка', 'Отзывы'])}</div>
+    <div class="pdiag"><p><b>Подбор расчёски</b></p><p>Найдите свою за четыре вопроса</p><a class="btn btn-outline" href="quiz.html">Пройти подбор</a></div>
+    <div class="paccs">{accs}</div>
+  </div></aside>
+</section>
+<section class="s-full" style="padding-top:60px">
+  <div class="wrap"><div class="ph dark" data-ph="Фото 1440×576 · модель расчёсывает волосы, движение"></div>
+  <div class="ov"><div class="w64">Какая расчёска ваша?</div><a class="btn btn-line" href="quiz.html" style="margin-top:8px">Подобрать</a></div></div>
+</section>
+<section class="rsum page" id="reviews">
+  <div class="rs-avg"><b>Х,Х</b><div><span class="stars">★★★★★</span><p>На основе ХХ отзывов с Wildberries и Ozon</p></div></div>
+  <div class="rs-bars">{''.join(f'<div><span>{n} ★</span><i><em style="width:{w}%"></em></i><span>ХХ</span></div>' for n, w in [(5, 90), (4, 6), (3, 2), (2, 1), (1, 1)])}</div>
+  <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Оставить отзыв в ЗЯ</a></div>
+</section>
+<section class="rlist page">{''.join('<div class="ritem"><div class="rh"><b>Имя покупателя</b><span class="stars">★★★★★</span><span class="rd">ДД.ММ.ГГ · Wildberries</span></div><p>Реальный отзыв с маркетплейса — текст целиком, без правок.</p></div>' for _ in range(3))}</section>
+<section class="page" style="padding:60px var(--g) 92px">
+  <h2 class="w36" style="text-align:center;margin-bottom:16px">Вам может понравиться…</h2>
+  <div class="grid4">{''.join(card(o) for o in others)}</div>
+</section>'''
+    page(f'product-{s}.html', f'№ {m} Массажная расчёска {c} — SANDÓVICH',
+         f'Массажная расчёска SANDÓVICH № {m}, цвет {c.lower()}. Купить в Золотом Яблоке.', body, 'brushes')
+
+
+for p in PRODUCTS:
+    product(p[0])
+
+
+# ---------- Квиз ----------
+QUIZ = [
+    ('Металл', 'Какой металл в украшениях вам ближе?', 'Подберём цвет, который совпадёт с тем, что вы носите каждый день', 'metal',
+     [('gold', 'Золото', 'ring-g'), ('silver', 'Серебро', 'ring-s'), ('rose', 'Розовое золото', 'ring-r'), ('none', 'Не ношу украшения', 'ring-0')]),
+    ('Форма', 'Какую расчёску вам удобнее держать?', 'Длинная ручка — № 01, короткая и широкая — № 02', 'model',
+     [('01', 'Длинную и тонкую', 'h-long'), ('02', 'Короткую и широкую', 'h-short'), ('any', 'Всё равно', 'h-any')]),
+    ('Место', 'Где она будет жить?', 'Подскажем, какой цвет будет смотреться лучше', 'place',
+     [('table', 'На туалетном столике', 'p-table'), ('bag', 'В сумке', 'p-bag'), ('bath', 'В ванной', 'p-bath'), ('gift', 'Это подарок', 'p-gift')]),
+    ('Акцент', 'Какой акцент в образе ваш?', 'Помада, маникюр, любимая вещь — что первым бросается в глаза', 'accent',
+     [('red', 'Красный', 'c-red'), ('nude', 'Нюд', 'c-nude'), ('black', 'Чёрный', 'c-black'), ('pink', 'Розовый', 'c-pink')]),
+]
+QICON = {
+    'ring-g': '<circle cx="32" cy="32" r="14" stroke="#B08A3E" stroke-width="3"/>',
+    'ring-s': '<circle cx="32" cy="32" r="14" stroke="#A9ABB0" stroke-width="3"/>',
+    'ring-r': '<circle cx="32" cy="32" r="14" stroke="#B4785A" stroke-width="3"/>',
+    'ring-0': '<circle cx="32" cy="32" r="14" stroke="#000" stroke-width="1"/><path d="M22 42 42 22" stroke="#000"/>',
+    'h-long': '<rect x="29" y="12" width="6" height="40" rx="3" stroke="#000"/>',
+    'h-short': '<rect x="26" y="20" width="12" height="26" rx="5" stroke="#000"/>',
+    'h-any': '<rect x="22" y="14" width="5" height="36" rx="2.5" stroke="#000"/><rect x="34" y="22" width="10" height="22" rx="4" stroke="#000"/>',
+    'p-table': '<path d="M16 36h32M20 36v12M44 36v12M27 36V22h10v14" stroke="#000"/>',
+    'p-bag': '<path d="M20 26h24l-2 20H22l-2-20zM27 26v-3a5 5 0 0 1 10 0v3" stroke="#000"/>',
+    'p-bath': '<path d="M16 34h32v4a8 8 0 0 1-8 8H24a8 8 0 0 1-8-8v-4zM22 34V20a4 4 0 0 1 8 0" stroke="#000"/>',
+    'p-gift': '<path d="M18 28h28v18H18zM16 22h32v6H16zM32 22v24M32 22c-3-6-10-6-8-1M32 22c3-6 10-6 8-1" stroke="#000"/>',
+    'c-red': '<circle cx="32" cy="32" r="12" fill="#9E1B2A"/>',
+    'c-nude': '<circle cx="32" cy="32" r="12" fill="#D9B8A3"/>',
+    'c-black': '<circle cx="32" cy="32" r="12" fill="#111"/>',
+    'c-pink': '<circle cx="32" cy="32" r="12" fill="#EBA3C3"/>',
+}
+qblocks = ''
+for title, q, hint, name, opts in QUIZ:
+    o = ''.join(f'<label class="qo"><input type="radio" name="{name}" value="{v}"><span class="qi"><svg viewBox="0 0 64 64" fill="none">{QICON[ic]}</svg></span><span class="ql">{t}</span></label>' for v, t, ic in opts)
+    qblocks += f'<fieldset class="qb"><legend class="w30">{title}</legend><p class="qq">{q}</p><p class="qh">{hint}</p><div class="qopts">{o}</div></fieldset>'
+quiz_body = f'''<section class="quiz">
+  <div class="qimg"><div class="ph dark" data-ph="Фото 585×877 · модель в очках, расчёска у головы, ироничный editorial"></div><p class="w56">Ваш подбор</p></div>
+  <form class="qform" id="quiz">{qblocks}
+    <div class="qres" id="qres" hidden>
+      <p class="qq">Ваша расчёска</p>
+      <div class="qres-card">
+        <a class="img ph" id="qr-img" href="#" data-ph="Предметка 4:5"><div class="num"><i>№</i><b id="qr-num">01</b></div></a>
+        <div><p class="w30" id="qr-name">№ 01 Золото</p><p class="qh" id="qr-why"></p>
+        <a class="btn btn-black zya" id="qr-buy" href="#">Купить в Золотом Яблоке</a>
+        <a class="ulink" id="qr-more" href="#" style="display:inline-block;margin-top:18px">Подробнее о расчёске</a></div>
+      </div>
+    </div>
+  </form>
+</section>'''
+page('quiz.html', 'Подбор расчёски — SANDÓVICH', 'Четыре вопроса — и мы подскажем, какая расчёска SANDÓVICH ваша.', quiz_body, 'quiz')
+
+
+# ---------- Каталог ----------
+stories = ''.join(f'<a class="story" href="product-{s}.html"><div class="ph" data-ph="Фото 129×129"></div><span>№ {m} {c}</span></a>' for s, m, c, *_ in PRODUCTS)
+cat_cards = [card(p[0]) for p in PRODUCTS]
+editorial = '<div class="card ed"><div class="ph" data-ph="Фото 692×1035 · модель с расчёской, editorial (вставка на 2 колонки)"></div></div>'
+grid = cat_cards[0] + cat_cards[1] + editorial + cat_cards[2] + cat_cards[3] + cat_cards[4] + cat_cards[5]
+cat_body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><span>›</span><span>Расчёски</span></nav>
+<section class="cat page">
+  <h1 class="w56c">Наши расчёски</h1>
+  <div class="stories-row">{stories}</div>
+  <div style="text-align:center"><a class="btn btn-black" href="quiz.html" style="width:271px;height:36px">Пройти подбор</a></div>
+  <div class="ctabs"><a class="on" href="#all" data-f="all">Все расчёски</a><a href="#m01" data-f="01">Модель № 01</a><a href="#m02" data-f="02">Модель № 02</a><a href="#gift" data-f="gift">В подарок</a></div>
+  <div class="cbar"><span>Фильтр</span><span class="sort">Сортировка: <b>Рекомендуем</b></span><span class="cnt" id="cnt">6 расчёсок</span></div>
+  <div class="cgrid" id="cgrid">{grid}</div>
+</section>'''
+page('catalog.html', 'Расчёски SANDÓVICH — каталог', 'Все массажные расчёски SANDÓVICH: модели № 01 и № 02, шесть цветов.', cat_body, 'brushes')
+print(ZYA_NOTE)
