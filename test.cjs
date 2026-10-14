@@ -51,9 +51,9 @@ const ok = (name, cond, extra = '') => results.push(`${cond ? 'OK  ' : 'FAIL'} $
     }
     await p.goto(url('quiz.html'), { waitUntil: 'networkidle' });
     for (const [n, v] of [['metal', 'silver'], ['model', '01'], ['place', 'bag'], ['accent', 'black']]) await p.check(`input[name="${n}"][value="${v}"]`, { force: true });
-    ok(`${tag} квиз: результат «№ 01 Серебро»`, (await p.textContent('#qr-name')) === '№ 01 Серебро', await p.textContent('#qr-name'));
+    ok(`${tag} квиз: результат «№ 01 Silver»`, (await p.textContent('#qr-name')) === '№ 01 Silver', await p.textContent('#qr-name'));
     await p.check('input[name="accent"][value="pink"]', { force: true });
-    ok(`${tag} квиз: розовый акцент → № 02 Розовая`, (await p.textContent('#qr-name')) === '№ 02 Розовая', await p.textContent('#qr-name'));
+    ok(`${tag} квиз: розовый акцент → № 02 Pink`, (await p.textContent('#qr-name')) === '№ 02 Pink', await p.textContent('#qr-name'));
     await p.screenshot({ path: path.join(out, `${tag}_quiz_result.jpg`), type: 'jpeg', quality: 70 });
     await p.goto(url('catalog.html#m02'), { waitUntil: 'networkidle' });
     ok(`${tag} каталог #m02 → 2 расчёски`, (await p.textContent('#cnt')) === '2 расчёски', await p.textContent('#cnt'));

@@ -19,6 +19,19 @@ MODEL = {
     '02': dict(name='№ 02', hand='короткой широкой ручкой', size='[Размеры № 02 — уточнить.]'),
 }
 
+DESC = {
+    '01-gold': 'Gold не ждёт особого случая, она устраивает его сама. Рядом с ней любая полка выглядит так, будто здесь готовятся к выходу. Модель № 01 из основательных: с ней хочется задержаться подольше.',
+    '01-silver': 'Silver никого не догоняет и ни под кого не подстраивается. Прохладный цвет для тех, у кого всё на своих местах, включая расчёску. Модель № 01 под стать: спокойная, обстоятельная, без суеты.',
+    '01-bronze': 'Bronze не бросается в глаза. Её замечают со второго взгляда и потом уже не забывают. Модель № 01 никуда не спешит, и этому цвету так даже больше идёт.',
+    '01-ruby': 'Ruby не ищет внимания. Оно находит её само. В модели № 01 у красного есть время: его и так заметили.',
+    '02-ruby': 'Ruby в модели № 02. Красный без долгих вступлений: пара движений, волосы на месте, можно идти. Задерживается ненадолго, запоминается надолго.',
+    '02-pink': 'Розовый, который не спрашивает разрешения. Pink смелая, весёлая и лёгкая на подъём. С Ruby они сёстры: одна громче, другая быстрее улыбается.',
+}
+HOWTO = {
+    '01': 'Расчёсывайте сухие или мокрые волосы, не спеша, от лба к затылку и дальше по длине. В душе ведите ею маску, бальзам или кондиционер по всей длине. Торопиться с № 01 некуда, она этого и не просит.',
+    '02': 'Пара движений от корней по длине, поправить, и можно идти. С мокрыми волосами так же легко: в душе проведите ею маску или бальзам по длине, и готово. № 02 не требует подготовки и не отнимает времени.',
+}
+
 ICON = dict(
     search='<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.3"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>',
     pin='<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.3"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>',
@@ -105,7 +118,7 @@ def header(active=''):
 
 FOOTER = '''<footer class="ftr">
   <div class="fgrid">
-    <div><div class="t">Сообщество SANDÓVICH</div><div class="s">Новинки, подборки и закрытые предложения — в нашем Telegram</div><a class="btn btn-lav" href="https://t.me/sandovich_official">Подписаться в Telegram</a></div>
+    <div><div class="t">Продолжение в Telegram</div><div class="s">Подбор цвета, идеи подарков и все места, где сейчас есть SANDÓVICH.</div><a class="btn btn-lav" href="https://t.me/sandovich_official">Подписаться</a></div>
     <div><h5>Нужна помощь?</h5><ul><li><a href="index.html#faq">Вопросы и ответы</a></li><li><a href="index.html#faq">Как ухаживать за расчёской</a></li><li><a href="#" class="zya">Где купить</a></li><li><a href="mailto:hello@sandovich.ru">Связаться с нами</a></li><li><a href="index.html#reviews">Отзывы покупателей</a></li></ul></div>
     <div><h5>Правовая информация</h5><ul><li><a href="#">Политика конфиденциальности</a></li><li><a href="#">Согласие на обработку данных</a></li><li><a href="#">Реквизиты</a></li></ul></div>
     <div><p class="follow">Мы в соцсетях</p><div class="soci">
@@ -149,7 +162,7 @@ def card(sku, ph=None):
 
 # ---------- Главная ----------
 home = open('src/home.html', encoding='utf-8').read()
-page('index.html', 'SANDÓVICH — массажные расчёски, которые не прячут',
+page('index.html', 'SANDÓVICH · массажные расчёски, которые не прячут',
      'Массажные расчёски SANDÓVICH: две модели, шесть цветов. Продаются в Золотом Яблоке.', home)
 
 
@@ -165,12 +178,11 @@ def product(sku):
         tiles += f'<a{cls} href="product-{s2}.html" title="{c2}"><span style="background:{hex2}"></span></a>'
     gal = lambda w, h, t: f'<div class="ph" data-ph="Фото {w}×{h} · {t}"></div>'
     acc = [
-        ('Описание', f'Массажная расчёска SANDÓVICH {md["name"]} с {md["hand"]}, цвет — {c.lower()}. Расчёска, которую не прячут: на туалетном столике, в сумке, на полке в ванной.'),
-        ('Как пользоваться', 'Начинайте с кончиков и поднимайтесь к корням, не тяните спутанные пряди. Пару минут утром и вечером — и расчёсывание становится ритуалом.'),
-        ('Материалы', 'Корпус — ABS-пластик, щетина — нейлон.'),
-        ('Размеры', md['size']),
-        ('Уход', 'Убирайте волосы со щетины после каждого использования. Раз в неделю промойте тёплой водой с мягким шампунем и высушите щетиной вниз.'),
-        ('Где купить', 'В Золотом Яблоке — в магазинах и на сайте. Кнопка «Купить» откроет карточку товара в Золотом Яблоке.'),
+        ('Описание', DESC[s]),
+        ('Как пользоваться', HOWTO[m]),
+        ('Материалы', 'Корпус: крашеный ABS-пластик. Щетина: нейлон, кончики закруглены.'),
+        ('Уход', 'Волосы со щетины лучше снимать сразу. Мыть расчёску можно целиком: тёплая вода, немного шампуня, мягкая щётка между рядами. Сохнет щетиной вниз, вдали от батареи и солнца.'),
+        ('Где купить', 'В магазинах Золотого Яблока и на goldapple.ru. Каждая расчёска продаётся в фирменной коробке.'),
     ]
     accs = ''.join(f'<details class="pacc"><summary><span class="pl">+</span>{t}</summary><div class="a">{a}</div></details>' for t, a in acc)
     others = [p[0] for p in PRODUCTS if p[0] != s][:4]
@@ -179,7 +191,7 @@ def product(sku):
   <div class="gallery">
     <div class="g2">{gal(375, 468, f'№ {m} {c.lower()}, вид сбоку и анфас, бежевая драпировка')}{gal(375, 468, 'расчёска в руке, крупно, editorial')}</div>
     <div class="g3">{gal(245, 306, 'вид сбоку')}{gal(245, 306, 'щетина крупно')}{gal(245, 306, 'в руке у модели')}</div>
-    <div class="g2">{gal(375, 468, 'деталь ручки с тиснением')}{gal(375, 468, 'расчёска с фирменной коробкой')}</div>
+    <div class="g2">{gal(375, 468, 'деталь крупно, макро')}{gal(375, 468, 'расчёска с фирменной коробкой')}</div>
   </div>
   <aside class="buy"><div class="buy-in">
     <div class="prate">Х,Х <span class="stars">★★★★★</span> <a href="#reviews" class="ulink">ХХ отзывов</a></div>
@@ -189,7 +201,7 @@ def product(sku):
     <a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a>
     <p class="pnote">Артикул {art} · доставка и самовывоз — через Золотое Яблоко</p>
     <div class="stories">{''.join(f'<div class="st"><div class="ph" data-ph="Видео"></div><span>{t}</span></div>' for t in ['Как расчёсываться', 'Шесть цветов', 'Упаковка', 'Отзывы'])}</div>
-    <div class="pdiag"><p><b>Подбор расчёски</b></p><p>Найдите свою за четыре вопроса</p><a class="btn btn-outline" href="quiz.html">Пройти подбор</a></div>
+    <div class="pdiag"><p><b>Сомневаетесь в цвете?</b></p><p>Четыре вопроса о вас, не о расчёске.</p><a class="btn btn-outline" href="quiz.html">Пройти подбор</a></div>
     <div class="paccs">{accs}</div>
   </div></aside>
 </section>
@@ -207,7 +219,7 @@ def product(sku):
   <h2 class="w36" style="text-align:center;margin-bottom:16px">Вам может понравиться…</h2>
   <div class="grid4">{''.join(card(o) for o in others)}</div>
 </section>'''
-    page(f'product-{s}.html', f'№ {m} Массажная расчёска {c} — SANDÓVICH',
+    page(f'product-{s}.html', f'№ {m} Массажная расчёска {c} · SANDÓVICH',
          f'Массажная расчёска SANDÓVICH № {m}, цвет {c.lower()}. Купить в Золотом Яблоке.', body, 'brushes')
 
 
@@ -217,13 +229,13 @@ for p in PRODUCTS:
 
 # ---------- Квиз ----------
 QUIZ = [
-    ('Металл', 'Какой металл в украшениях вам ближе?', 'Подберём цвет, который совпадёт с тем, что вы носите каждый день', 'metal',
-     [('gold', 'Золото', 'ring-g'), ('silver', 'Серебро', 'ring-s'), ('rose', 'Розовое золото', 'ring-r'), ('none', 'Не ношу украшения', 'ring-0')]),
-    ('Форма', 'Какую расчёску вам удобнее держать?', 'Длинная ручка — № 01, короткая и широкая — № 02', 'model',
-     [('01', 'Длинную и тонкую', 'h-long'), ('02', 'Короткую и широкую', 'h-short'), ('any', 'Всё равно', 'h-any')]),
-    ('Место', 'Где она будет жить?', 'Подскажем, какой цвет будет смотреться лучше', 'place',
-     [('table', 'На туалетном столике', 'p-table'), ('bag', 'В сумке', 'p-bag'), ('bath', 'В ванной', 'p-bath'), ('gift', 'Это подарок', 'p-gift')]),
-    ('Акцент', 'Какой акцент в образе ваш?', 'Помада, маникюр, любимая вещь — что первым бросается в глаза', 'accent',
+    ('Металл', 'Какой металл вы носите чаще?', 'Кольца, серьги, часы. То, что надеваете не задумываясь.', 'metal',
+     [('gold', 'Золото', 'ring-g'), ('silver', 'Серебро', 'ring-s'), ('rose', 'Розовое золото', 'ring-r'), ('none', 'Не ношу', 'ring-0')]),
+    ('Темп', 'Что про вас?', 'Речь о характере, а не о расписании.', 'model',
+     [('01', 'Собираюсь основательно', 'h-long'), ('02', 'Быстро и без суеты', 'h-short'), ('any', 'Бывает по-разному', 'h-any')]),
+    ('Место', 'Где она будет жить?', 'Там, где чаще всего попадается на глаза.', 'place',
+     [('table', 'Туалетный столик', 'p-table'), ('bag', 'Сумка', 'p-bag'), ('bath', 'Ванная', 'p-bath'), ('gift', 'Подарок', 'p-gift')]),
+    ('Акцент', 'Какой цвет в образе главный?', 'Помада, сумка, ногти. То, что замечают первым.', 'accent',
      [('red', 'Красный', 'c-red'), ('nude', 'Нюд', 'c-nude'), ('black', 'Чёрный', 'c-black'), ('pink', 'Розовый', 'c-pink')]),
 ]
 QICON = {
@@ -248,10 +260,10 @@ for title, q, hint, name, opts in QUIZ:
     o = ''.join(f'<label class="qo"><input type="radio" name="{name}" value="{v}"><span class="qi"><svg viewBox="0 0 64 64" fill="none">{QICON[ic]}</svg></span><span class="ql">{t}</span></label>' for v, t, ic in opts)
     qblocks += f'<fieldset class="qb"><legend class="w30">{title}</legend><p class="qq">{q}</p><p class="qh">{hint}</p><div class="qopts">{o}</div></fieldset>'
 quiz_body = f'''<section class="quiz">
-  <div class="qimg"><div class="ph dark" data-ph="Фото 585×877 · модель в очках, расчёска у головы, ироничный editorial"></div><p class="w56">Ваш подбор</p></div>
+  <div class="qimg"><div class="ph dark" data-ph="Фото 585×877 · модель в очках, расчёска у головы, ироничный editorial"></div><p class="w56">Ваш характер</p></div>
   <form class="qform" id="quiz">{qblocks}
     <div class="qres" id="qres" hidden>
-      <p class="qq">Ваша расчёска</p>
+      <p class="qq">Ваша расчёска:</p>
       <div class="qres-card">
         <a class="img ph" id="qr-img" href="#" data-ph="Предметка 4:5"><div class="num"><i>№</i><b id="qr-num">01</b></div></a>
         <div><p class="w30" id="qr-name">№ 01 Золото</p><p class="qh" id="qr-why"></p>
@@ -261,7 +273,7 @@ quiz_body = f'''<section class="quiz">
     </div>
   </form>
 </section>'''
-page('quiz.html', 'Подбор расчёски — SANDÓVICH', 'Четыре вопроса — и мы подскажем, какая расчёска SANDÓVICH ваша.', quiz_body, 'quiz')
+page('quiz.html', 'Подбор расчёски · SANDÓVICH', 'Четыре вопроса — и мы подскажем, какая расчёска SANDÓVICH ваша.', quiz_body, 'quiz')
 
 
 # ---------- Каталог ----------
@@ -271,12 +283,12 @@ editorial = '<div class="card ed"><div class="ph" data-ph="Фото 692×1035 ·
 grid = cat_cards[0] + cat_cards[1] + editorial + cat_cards[2] + cat_cards[3] + cat_cards[4] + cat_cards[5]
 cat_body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><span>›</span><span>Расчёски</span></nav>
 <section class="cat page">
-  <h1 class="w56c">Наши расчёски</h1>
+  <h1 class="w56c">Вся коллекция</h1>
   <div class="stories-row">{stories}</div>
-  <div style="text-align:center"><a class="btn btn-black" href="quiz.html" style="width:271px;height:36px">Пройти подбор</a></div>
+  <div style="text-align:center"><a class="btn btn-black" href="quiz.html" style="width:271px;height:36px">Подобрать свою</a></div>
   <div class="ctabs"><a class="on" href="#all" data-f="all">Все расчёски</a><a href="#m01" data-f="01">Модель № 01</a><a href="#m02" data-f="02">Модель № 02</a><a href="#gift" data-f="gift">В подарок</a></div>
   <div class="cbar"><span>Фильтр</span><span class="sort">Сортировка: <b>Рекомендуем</b></span><span class="cnt" id="cnt">6 расчёсок</span></div>
   <div class="cgrid" id="cgrid">{grid}</div>
 </section>'''
-page('catalog.html', 'Расчёски SANDÓVICH — каталог', 'Все массажные расчёски SANDÓVICH: модели № 01 и № 02, шесть цветов.', cat_body, 'brushes')
+page('catalog.html', 'Расчёски SANDÓVICH · каталог', 'Все массажные расчёски SANDÓVICH: модели № 01 и № 02, шесть цветов.', cat_body, 'brushes')
 print(ZYA_NOTE)

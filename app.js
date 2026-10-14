@@ -93,8 +93,16 @@ if (cgrid) {
 const quiz = document.getElementById('quiz');
 if (quiz) {
   const NAMES = {
-    '01-gold': '№ 01 Золото', '01-silver': '№ 01 Серебро', '01-bronze': '№ 01 Бронза',
-    '01-ruby': '№ 01 Рубин', '02-ruby': '№ 02 Рубин', '02-pink': '№ 02 Розовая',
+    '01-gold': '№ 01 Gold', '01-silver': '№ 01 Silver', '01-bronze': '№ 01 Bronze',
+    '01-ruby': '№ 01 Ruby', '02-ruby': '№ 02 Ruby', '02-pink': '№ 02 Pink',
+  };
+  const CHAR = {
+    '01-gold': 'Gold из тех, кого замечают в любой комнате. Ей это нравится.',
+    '01-silver': 'Silver: спокойствие, которое со стороны выглядит как вкус.',
+    '01-bronze': 'Bronze: тепло, которое не нужно доказывать.',
+    '01-ruby': 'Ruby: красный, рядом с которым остальное становится фоном.',
+    '02-ruby': 'Ruby № 02: красный, которому хватает пары движений.',
+    '02-pink': 'Pink: смелость, которая умеет улыбаться.',
   };
   const pick = (a) => {
     let model = a.model === '02' ? '02' : '01';
@@ -108,13 +116,13 @@ if (quiz) {
     if (model === '02' && !['ruby', 'pink'].includes(color)) color = a.accent === 'nude' ? 'pink' : 'ruby';
     return `${model}-${color}`;
   };
-  const why = (a, sku) => {
+  const why = (a) => {
     const parts = [];
-    if (a.metal && a.metal !== 'none') parts.push('подходит к вашим украшениям');
-    if (a.accent) parts.push('поддерживает акцент в образе');
-    if (a.place === 'gift') parts.push('приходит в фирменной коробке — можно дарить без обёртки');
-    else if (a.place === 'bag') parts.push(sku.startsWith('02') ? 'короткая — удобно носить в сумке' : 'помещается в сумку');
-    return parts.length ? `Почему: ${parts.join(', ')}.` : '';
+    if (a.metal && a.metal !== 'none') parts.push('Под ваш металл.');
+    if (a.model && a.model !== 'any') parts.push('Под ваш темп.');
+    if (a.place === 'gift') parts.push('Приходит в фирменной коробке, дарить можно сразу.');
+    else if (a.place) parts.push('Ей будет хорошо на виду.');
+    return parts.join(' ');
   };
   quiz.addEventListener('change', () => {
     const a = Object.fromEntries(new FormData(quiz));
@@ -124,7 +132,7 @@ if (quiz) {
     res.hidden = false;
     document.getElementById('qr-name').textContent = NAMES[sku];
     document.getElementById('qr-num').textContent = sku.slice(0, 2);
-    document.getElementById('qr-why').textContent = why(a, sku);
+    document.getElementById('qr-why').textContent = `${CHAR[sku]} ${why(a)}`;
     document.getElementById('qr-img').href = `product-${sku}.html`;
     document.getElementById('qr-img').dataset.ph = `Предметка 4:5 · ${NAMES[sku]}`;
     document.getElementById('qr-more').href = `product-${sku}.html`;
