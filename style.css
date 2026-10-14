@@ -417,7 +417,8 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 .mg-feat .ph.has-img .w28,.s-full .ph.has-img~.ov{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .qb[hidden]{display:none}
 .hero .ph.has-img>img{object-position:50% 45%}
-.s-full .ph.has-img>img{object-position:50% 36%}
+.s-full .ph.has-img>img{object-position:50% 35%}
+@media (min-width:1000px){.s-full .wrap{height:clamp(576px,34vw,820px)}}
 /* затемнение снизу, чтобы белые заголовки читались на светлых фото */
 .ph.has-img:not(.pack)::after{display:block;content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(0,0,0,.42),rgba(0,0,0,0) 55%)}
 .cols .ph.has-img::after,.g2 .ph.has-img::after,.g3 .ph.has-img::after,.s-two .ph.has-img::after,.dip .ph.has-img::after,.cgrid .ed .ph.has-img::after{display:none}
