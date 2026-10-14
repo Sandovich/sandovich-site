@@ -1,4 +1,7 @@
 import re
+import time
+
+VER = time.strftime('%Y%m%d%H%M')  # метка версии: браузер не возьмёт старые style.css/app.js из кэша
 
 # Сборка сайта SANDÓVICH (копия структуры labonnebrosse.com 1:1):
 #   python -X utf8 build.py  →  index.html, catalog.html, quiz.html, product-<sku>.html
@@ -55,7 +58,7 @@ def head(title, desc):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Roboto+Condensed:wght@800&family=EB+Garamond:wght@500&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v={VER}">
 </head>
 <body>
 '''
@@ -131,7 +134,7 @@ FOOTER = '''<footer class="ftr">
   <div class="zya-line">Продаётся в Золотом Яблоке</div>
   <p class="copy">© 2026 SANDÓVICH</p>
 </footer>
-<script src="app.js"></script>
+<script src="app.js?v=__VER__"></script>
 </body>
 </html>
 '''
@@ -176,7 +179,7 @@ def add_imgs(html):
 
 
 def page(fname, title, desc, body, active=''):
-    open(fname, 'w', encoding='utf-8').write(add_imgs(head(title, desc) + header(active) + body + '\n' + FOOTER))
+    open(fname, 'w', encoding='utf-8').write(add_imgs(head(title, desc) + header(active) + body + '\n' + FOOTER.replace('__VER__', VER)))
     print('ok', fname)
 
 
