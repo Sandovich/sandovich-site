@@ -8,6 +8,7 @@ VER = time.strftime('%Y%m%d%H%M')  # метка версии: браузер н�
 # Общие части (head, шапка, мега-меню, мобильное меню, подвал) — здесь; стили — style.css; поведение — app.js.
 # Тексты черновые; [в квадратных скобках] — то, что нужно уточнить/заполнить.
 
+LETU = 'https://www.letu.ru/brand/sandovich'
 ZYA_NOTE = 'Ссылки на карточки Золотого Яблока — заполнить в app.js (ZYA_LINKS)'
 
 PRODUCTS = [
@@ -77,7 +78,7 @@ def header(active=''):
     def li(key, text, href, mega=''):
         cls = ' class="on"' if key == active else ''
         return f'<li{cls} data-mega="{mega}"><a href="{href}">{text}</a></li>' if mega else f'<li{cls}><a href="{href}">{text}</a></li>'
-    return f'''<div class="ann"><a href="#" class="zya">Продаётся в Золотом Яблоке · Найти магазин</a>{ICON['arrow']}</div>
+    return f'''<div class="ann"><a href="#" class="zya">Продаётся на goldapple.ru · Перейти</a>{ICON['arrow']}</div>
 <header class="hdr">
   <a class="logo" href="index.html">SANDÓVICH</a>
   <nav class="nav">
@@ -131,7 +132,7 @@ FOOTER = '''<footer class="ftr">
       <a href="https://vk.ru/sandovich_official" aria-label="ВКонтакте" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M12.8 17.3c-5.6 0-8.8-3.8-8.9-10.2h2.8c.1 4.7 2.2 6.6 3.8 7V7.1h2.6v4c1.6-.2 3.3-2 3.8-4h2.6c-.4 2.5-2.2 4.3-3.5 5.1 1.3.6 3.4 2.2 4.2 5.1h-2.9c-.6-1.9-2.2-3.4-4.2-3.6v3.6h-.3z"/></svg></a>
     </div></div>
   </div>
-  <div class="zya-line">Продаётся в Золотом Яблоке</div>
+  <div class="zya-line">Продаётся в Золотом Яблоке<a class="letu" href="https://www.letu.ru/brand/sandovich" target="_blank" rel="noopener">Также в Л’Этуаль</a></div>
   <p class="copy">© 2026 SANDÓVICH</p>
 </footer>
 <script src="app.js?v=__VER__"></script>
@@ -272,7 +273,7 @@ def product(sku):
         ('Как пользоваться', HOWTO[m]),
         ('Материалы', 'Корпус: крашеный ABS-пластик. Щетина: нейлон, кончики закруглены.'),
         ('Уход', 'Волосы со щетины лучше снимать сразу. Мыть расчёску можно целиком: тёплая вода, немного шампуня, мягкая щётка между рядами. Сохнет щетиной вниз, вдали от батареи и солнца.'),
-        ('Где купить', 'В магазинах Золотого Яблока и на goldapple.ru. Каждая расчёска продаётся в фирменной коробке.'),
+        ('Где купить', f'На goldapple.ru. Ещё её можно найти на <a href="{LETU}" target="_blank" rel="noopener">letu.ru</a>. Каждая расчёска продаётся в фирменной коробке.'),
     ]
     rs = REV['sku'][s]['stats']
     accs = ''.join(f'<details class="pacc"><summary><span class="pl">+</span>{t}</summary><div class="a">{a}</div></details>' for t, a in acc)
@@ -419,7 +420,7 @@ page('requisites.html', 'Реквизиты · SANDÓVICH', 'Реквизиты 
   <dt>Продавец</dt><dd>{SELLER}</dd>
   <dt>ИНН</dt><dd>{INN}</dd>
   <dt>Почта</dt><dd><a href="mailto:hello@sandovich.ru">hello@sandovich.ru</a></dd>
-  <dt>Где купить</dt><dd>Магазины Золотого Яблока и goldapple.ru</dd>
+  <dt>Где купить</dt><dd>goldapple.ru, а также letu.ru</dd>
 </dl>'''))
 page('privacy.html', 'Политика конфиденциальности · SANDÓVICH', 'Политика обработки персональных данных на сайте sandovich-official.ru.', legal('Политика конфиденциальности', f'''
 <p>Настоящая политика описывает, как сайт sandovich-official.ru обращается с данными посетителей. Оператор сайта: {SELLER}, ИНН {INN}.</p>
