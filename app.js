@@ -159,12 +159,30 @@ if (quiz) {
   };
 
   let shareData = null;
-  document.getElementById('qr-share')?.addEventListener('click', async () => {
-    if (!shareData) return;
-    if (navigator.share) { try { await navigator.share(shareData); } catch (e) {} return; }
-    try { await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`); } catch (e) {}
-    const ok = document.getElementById('qr-copied'); ok.hidden = false; setTimeout(() => { ok.hidden = true; }, 4000);
+  // Поделиться: свои кнопки (работают и без HTTPS); MAX ссылки для отправки не даёт — копируем текст
+  const menu = document.getElementById('qr-menu');
+  const note = document.getElementById('qr-copied');
+  const copyText = (t) => {
+    const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    ta.remove(); if (!ok && navigator.clipboard) navigator.clipboard.writeText(t).catch(() => {});
+  };
+  const say = (t) => { note.textContent = t; note.hidden = false; clearTimeout(say.t); say.t = setTimeout(() => { note.hidden = true; }, 5000); };
+  document.getElementById('qr-share')?.addEventListener('click', (e) => {
+    menu.hidden = !menu.hidden; e.currentTarget.setAttribute('aria-expanded', String(!menu.hidden));
   });
+  menu?.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-s]'); if (!el || !shareData) return;
+    const { text, url } = shareData; const u = encodeURIComponent(url); const t = encodeURIComponent(text);
+    const s = el.dataset.s;
+    if (s === 'tg') el.href = `https://t.me/share/url?url=${u}&text=${t}`;
+    else if (s === 'vk') el.href = `https://vk.com/share.php?url=${u}&title=${t}`;
+    else if (s === 'wa') el.href = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+    else if (s === 'max') { copyText(`${text} ${url}`); say('Текст скопирован. Откройте MAX и вставьте его в чат.'); }
+    else if (s === 'copy') { copyText(`${text} ${url}`); say('Скопировано. Отправьте подруге.'); }
+  });
+
   quiz.addEventListener('change', () => {
     const a = Object.fromEntries(new FormData(quiz));
     helpers.forEach((f) => { f.hidden = a.season !== 'unknown'; });

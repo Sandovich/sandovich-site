@@ -422,8 +422,11 @@ quiz_body = f'''<section class="quiz">
         <div><p class="w30" id="qr-name">№ 01 Золото</p><p class="qh" id="qr-why"></p>
         <p class="qh" id="qr-alt" hidden>Тоже ваш цвет: <a class="ulink" id="qr-alt-a" href="#"></a></p>
         <a class="btn btn-black zya" id="qr-buy" href="#">Купить в Золотом Яблоке</a>
-        <div class="qr-links"><a class="ulink" id="qr-more" href="#">Подробнее о расчёске</a><button type="button" class="ulink qr-share" id="qr-share">Поделиться моим цветом</button></div>
-        <p class="qh" id="qr-copied" hidden>Ссылка скопирована. Отправьте её подруге.</p></div>
+        <div class="qr-links"><a class="ulink" id="qr-more" href="#">Подробнее о расчёске</a><button type="button" class="ulink qr-share" id="qr-share" aria-expanded="false">Поделиться моим цветом</button></div>
+        <div class="qr-menu" id="qr-menu" hidden>
+          <a data-s="tg" target="_blank" rel="noopener">Telegram</a><a data-s="vk" target="_blank" rel="noopener">ВКонтакте</a><a data-s="wa" target="_blank" rel="noopener">WhatsApp</a><button type="button" data-s="max">MAX</button><button type="button" data-s="copy">Скопировать</button>
+        </div>
+        <p class="qh" id="qr-copied" hidden></p></div>
       </div>
     </div>
   </form>
