@@ -104,40 +104,60 @@ if (quiz) {
     '02-ruby': 'Ruby № 02: красный, которому хватает пары движений.',
     '02-pink': 'Pink: смелость, которая умеет улыбаться.',
   };
-  const pick = (a) => {
-    let model = a.model === '02' ? '02' : '01';
-    let color;
-    if (a.accent === 'pink') { model = '02'; color = 'pink'; }
-    else if (a.accent === 'red') color = 'ruby';
-    else if (a.metal === 'gold') color = 'gold';
-    else if (a.metal === 'silver') color = 'silver';
-    else if (a.metal === 'rose') color = 'bronze';
-    else color = a.accent === 'black' ? 'silver' : 'gold';
-    if (model === '02' && !['ruby', 'pink'].includes(color)) color = a.accent === 'nude' ? 'pink' : 'ruby';
-    return `${model}-${color}`;
+  // Подбор: модель строго из ответа про темп, цвет — сумма очков за металл и акцент.
+  const SKUS = { '01': ['gold', 'silver', 'bronze', 'ruby'], '02': ['ruby', 'pink'] };
+  const METAL = { gold: { gold: 3 }, silver: { silver: 3 }, rose: { bronze: 3, pink: 1 }, none: {} };
+  const ACCENT = { red: { ruby: 3 }, pink: { pink: 3, bronze: 1 }, nude: { bronze: 2, gold: 1 }, black: { silver: 2, ruby: 1 } };
+  const score = (a, color) => {
+    const m = (METAL[a.metal] || {})[color] || 0;
+    const c = (ACCENT[a.accent] || {})[color] || 0;
+    return { m, c, total: m + c };
   };
-  const why = (a) => {
+  // при равенстве очков побеждает вопрос, который поменяли последним
+  const pick = (a, last) => {
+    const models = a.model === '01' || a.model === '02' ? [a.model] : ['01', '02'];
+    let best = null;
+    for (const model of models) {
+      for (const color of SKUS[model]) {
+        const s = score(a, color);
+        // в сумку, если модель не выбрана, чуть ближе лёгкая № 02
+        const bonus = a.model === 'any' && a.place === 'bag' && model === '02' ? 0.5 : 0;
+        const total = s.total + bonus;
+        const lastPts = last === 'accent' ? s.c : s.m;
+        const cand = { sku: `${model}-${color}`, total, m: s.m, c: s.c, lastPts };
+        if (!best || total > best.total || (total === best.total && lastPts > best.lastPts)) best = cand;
+      }
+    }
+    return best;
+  };
+  const why = (a, best) => {
     const parts = [];
-    if (a.metal && a.metal !== 'none') parts.push('Под ваш металл.');
-    if (a.model && a.model !== 'any') parts.push('Под ваш темп.');
+    if (best.m > 0) parts.push('Под ваш металл.');
+    if (best.c > 0) parts.push('Под акцент в образе.');
+    if (a.model === '01' || a.model === '02') parts.push('Под ваш темп.');
     if (a.place === 'gift') parts.push('Приходит в фирменной коробке, дарить можно сразу.');
     else if (a.place) parts.push('Ей будет хорошо на виду.');
     return parts.join(' ');
   };
-  quiz.addEventListener('change', () => {
+  let lastQ = 'metal';
+  quiz.addEventListener('change', (e) => {
+    if (e.target.name === 'metal' || e.target.name === 'accent') lastQ = e.target.name;
     const a = Object.fromEntries(new FormData(quiz));
     if (Object.keys(a).length < 4) return;
-    const sku = pick(a);
+    const best = pick(a, lastQ);
+    const sku = best.sku;
     const res = document.getElementById('qres');
     res.hidden = false;
     document.getElementById('qr-name').textContent = NAMES[sku];
     document.getElementById('qr-num').textContent = sku.slice(0, 2);
-    document.getElementById('qr-why').textContent = `${CHAR[sku]} ${why(a)}`;
+    document.getElementById('qr-why').textContent = `${CHAR[sku]} ${why(a, best)}`;
+    const card = res.querySelector('.qres-card');
+    card.classList.remove('upd'); void card.offsetWidth; card.classList.add('upd');
     document.getElementById('qr-img').href = `product-${sku}.html`;
     document.getElementById('qr-img').dataset.ph = `Предметка 4:5 · ${NAMES[sku]}`;
     document.getElementById('qr-more').href = `product-${sku}.html`;
     const buy = document.getElementById('qr-buy');
     buy.href = zyaHref(SKU_ART[sku]);
-    res.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!res.dataset.shown) { res.dataset.shown = '1'; res.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
   });
 }

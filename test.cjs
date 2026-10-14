@@ -52,8 +52,15 @@ const ok = (name, cond, extra = '') => results.push(`${cond ? 'OK  ' : 'FAIL'} $
     await p.goto(url('quiz.html'), { waitUntil: 'networkidle' });
     for (const [n, v] of [['metal', 'silver'], ['model', '01'], ['place', 'bag'], ['accent', 'black']]) await p.check(`input[name="${n}"][value="${v}"]`, { force: true });
     ok(`${tag} квиз: результат «№ 01 Silver»`, (await p.textContent('#qr-name')) === '№ 01 Silver', await p.textContent('#qr-name'));
+    await p.check('input[name="metal"][value="gold"]', { force: true });
+    ok(`${tag} квиз: смена металла пересчитывает → № 01 Gold`, (await p.textContent('#qr-name')) === '№ 01 Gold', await p.textContent('#qr-name'));
+    await p.check('input[name="accent"][value="red"]', { force: true });
+    ok(`${tag} квиз: красный акцент → № 01 Ruby`, (await p.textContent('#qr-name')) === '№ 01 Ruby', await p.textContent('#qr-name'));
+    await p.check('input[name="model"][value="02"]', { force: true });
     await p.check('input[name="accent"][value="pink"]', { force: true });
-    ok(`${tag} квиз: розовый акцент → № 02 Pink`, (await p.textContent('#qr-name')) === '№ 02 Pink', await p.textContent('#qr-name'));
+    ok(`${tag} квиз: № 02 + розовый → № 02 Pink`, (await p.textContent('#qr-name')) === '№ 02 Pink', await p.textContent('#qr-name'));
+    await p.check('input[name="model"][value="01"]', { force: true });
+    ok(`${tag} квиз: модель из ответа про темп (01 при розовом)`, (await p.textContent('#qr-name')).startsWith('№ 01'), await p.textContent('#qr-name'));
     await p.screenshot({ path: path.join(out, `${tag}_quiz_result.jpg`), type: 'jpeg', quality: 70 });
     await p.goto(url('catalog.html#m02'), { waitUntil: 'networkidle' });
     ok(`${tag} каталог #m02 → 2 расчёски`, (await p.textContent('#cnt')) === '2 расчёски', await p.textContent('#cnt'));

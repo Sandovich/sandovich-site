@@ -320,6 +320,8 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 
 .card .ph::after{right:110px}
 .pdp>*,.quiz>*{min-width:0}
+.qres-card.upd{animation:qflash .45s ease}
+@keyframes qflash{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}
 /* ============ МОБАЙЛ (замеры 390) ============ */
 @media (max-width:749px){
   :root{--g:16px}
