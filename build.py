@@ -125,10 +125,10 @@ FOOTER = '''<footer class="ftr">
   <div class="fgrid">
     <div><div class="t">Продолжение в Telegram</div><div class="s">Подбор цвета, идеи подарков и все места, где сейчас есть SANDÓVICH.</div><a class="btn btn-lav" href="https://t.me/sandovich_official">Подписаться</a></div>
     <div><h5>Нужна помощь?</h5><ul><li><a href="index.html#faq">Вопросы и ответы</a></li><li><a href="index.html#faq">Как ухаживать за расчёской</a></li><li><a href="#" class="zya">Где купить</a></li><li><a href="mailto:hello@sandovich.ru">Связаться с нами</a></li><li><a href="index.html#reviews">Отзывы покупателей</a></li></ul></div>
-    <div><h5>Правовая информация</h5><ul><li><a href="#">Политика конфиденциальности</a></li><li><a href="#">Согласие на обработку данных</a></li><li><a href="#">Реквизиты</a></li></ul></div>
+    <div><h5>Правовая информация</h5><ul><li><a href="privacy.html">Политика конфиденциальности</a></li><li><a href="requisites.html">Реквизиты</a></li></ul></div>
     <div><p class="follow">Мы в соцсетях</p><div class="soci">
       <a href="https://t.me/sandovich_official" aria-label="Telegram"><svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M21.5 3.6 2.9 10.8c-1.3.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5zM9.7 14.6l-.4 4-1.5-4.8 10.4-6.6-8.5 7.4z"/></svg></a>
-      <a href="#" aria-label="ВКонтакте"><svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M12.8 17.3c-5.6 0-8.8-3.8-8.9-10.2h2.8c.1 4.7 2.2 6.6 3.8 7V7.1h2.6v4c1.6-.2 3.3-2 3.8-4h2.6c-.4 2.5-2.2 4.3-3.5 5.1 1.3.6 3.4 2.2 4.2 5.1h-2.9c-.6-1.9-2.2-3.4-4.2-3.6v3.6h-.3z"/></svg></a>
+      <a href="https://vk.ru/sandovich_official" aria-label="ВКонтакте" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M12.8 17.3c-5.6 0-8.8-3.8-8.9-10.2h2.8c.1 4.7 2.2 6.6 3.8 7V7.1h2.6v4c1.6-.2 3.3-2 3.8-4h2.6c-.4 2.5-2.2 4.3-3.5 5.1 1.3.6 3.4 2.2 4.2 5.1h-2.9c-.6-1.9-2.2-3.4-4.2-3.6v3.6h-.3z"/></svg></a>
     </div></div>
   </div>
   <div class="zya-line">Продаётся в Золотом Яблоке</div>
@@ -407,3 +407,30 @@ rev_body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><
 </section>
 <script type="application/json" id="rvdata">{_all}</script>'''
 page('reviews.html', 'Отзывы · SANDÓVICH', 'Что пишут покупательницы о массажных расчёсках SANDÓVICH.', rev_body)
+
+
+# ---------- Правовые страницы ----------
+SELLER = 'Индивидуальный предприниматель Сандович Яна Руслановна'
+INN = '511200997183'
+legal = lambda title, body: f'''<nav class="crumbs page"><a href="index.html">Главная</a><span>›</span><span>{title}</span></nav>
+<section class="legal page"><h1 class="w56c">{title}</h1>{body}</section>'''
+page('requisites.html', 'Реквизиты · SANDÓVICH', 'Реквизиты продавца SANDÓVICH.', legal('Реквизиты', f'''
+<dl>
+  <dt>Продавец</dt><dd>{SELLER}</dd>
+  <dt>ИНН</dt><dd>{INN}</dd>
+  <dt>Почта</dt><dd><a href="mailto:hello@sandovich.ru">hello@sandovich.ru</a></dd>
+  <dt>Где купить</dt><dd>Магазины Золотого Яблока и goldapple.ru</dd>
+</dl>'''))
+page('privacy.html', 'Политика конфиденциальности · SANDÓVICH', 'Политика обработки персональных данных на сайте sandovich-official.ru.', legal('Политика конфиденциальности', f'''
+<p>Настоящая политика описывает, как сайт sandovich-official.ru обращается с данными посетителей. Оператор сайта: {SELLER}, ИНН {INN}.</p>
+<h2>1. Какие данные мы собираем</h2>
+<p>На сайте нет регистрации, корзины и форм. Мы не просим и не храним имя, телефон, адрес или платёжные данные. Покупка происходит на сайте Золотого Яблока по его правилам.</p>
+<h2>2. Технические данные</h2>
+<p>При открытии страниц браузер обращается к хостингу сайта (GitHub Pages) и к сервису шрифтов Google Fonts. Эти сервисы могут получать технические сведения: IP-адрес, тип браузера, время запроса. Мы эти сведения не получаем и не обрабатываем.</p>
+<h2>3. Файлы cookie</h2>
+<p>Сайт не устанавливает собственные cookie и не использует системы аналитики и рекламы.</p>
+<h2>4. Если вы пишете нам</h2>
+<p>Если вы отправляете письмо на hello@sandovich.ru, мы используем ваш адрес и текст письма только чтобы ответить. По запросу на тот же адрес удалим переписку.</p>
+<h2>5. Изменения</h2>
+<p>Если на сайте появятся формы или аналитика, политика будет обновлена до их запуска. Актуальная версия всегда на этой странице.</p>
+<p class="legal-date">Редакция от 14 октября 2026 года.</p>'''))
