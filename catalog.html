@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Roboto+Condensed:wght@800&family=EB+Garamond:wght@500&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/w/zya-01-gold-1-1600.webp" imagesrcset="img/w/zya-01-gold-1-800.webp 800w, img/w/zya-01-gold-1-1600.webp 1600w" imagesizes="(max-width:600px) 100vw, 50vw" fetchpriority="high">
-<link rel="stylesheet" href="style.css?v=202610151642">
+<link rel="stylesheet" href="style.css?v=202610151951">
 <link rel="canonical" href="http://sandovich-official.ru/catalog.html">
 <meta property="og:type" content="website"><meta property="og:site_name" content="SANDÓVICH"><meta property="og:locale" content="ru_RU">
 <meta property="og:title" content="Расчёски SANDÓVICH · каталог"><meta property="og:description" content="Все массажные расчёски SANDÓVICH: модели № 01 и № 02, пять цветов.">
@@ -93,11 +93,11 @@
 .gift-v .ln{font-size:15px;line-height:22px;margin-top:14px;max-width:380px}
 .gift-v .btn{width:269px;margin-top:32px}.gift-v .btn.btn-line{margin-top:10px;color:#000;border:1px solid #000}
 @media(max-width:999px){.gift-v .in{grid-template-columns:1fr;padding-top:32px}.gift-v .ph{height:auto;aspect-ratio:2/3}.gift-v .tx{padding:28px 0 0}.gift-v .btn{width:100%}}
-</style><div class="in"><div class="ph has-img"><video muted loop playsinline preload="none" poster="img/v/vending-poster.webp" aria-label="Девушка покупает коробку SANDÓVICH RUBY в уличном автомате"><source src="img/v/vending-480.webm" type="video/webm"><source src="img/v/vending-480.mp4" type="video/mp4"></video></div>
+</style><div class="in"><div class="ph has-img"><video muted loop playsinline webkit-playsinline preload="metadata" poster="img/v/vending-poster.webp" aria-label="Девушка покупает коробку SANDÓVICH RUBY в уличном автомате"><source src="img/v/vending-480.mp4" type="video/mp4"><source src="img/v/vending-480.webm" type="video/webm"></video></div>
 <div class="tx"><div class="k">В подарок</div><div class="w64">Она даже не&nbsp;удивилась</div><p class="ln">Так выглядит подарок, который угадали: будто он всегда был её.</p>
 <a class="btn btn-black zya" href="#">Купить в Золотом Яблоке</a><a class="btn btn-line" href="quiz.html">Подобрать цвет</a></div></div></section>
 <script>(function(){var b=document.getElementById('gift-block'),v=b.querySelector('video'),calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function sync(){var on=location.hash==='#gift';b.hidden=!on;if(on&&!calm){v.play().catch(function(){})}else{v.pause()}}
+v.muted=true;v.playsInline=true;if(calm)v.controls=true;function sync(){var on=location.hash==='#gift';b.hidden=!on;if(on&&!calm){var p=v.play();if(p&&p.catch)p.catch(function(){v.controls=true})}else{v.pause()}}
 addEventListener('hashchange',sync);document.querySelectorAll('.ctabs a').forEach(function(a){a.addEventListener('click',function(){setTimeout(sync,0)})});sync();})();</script>
 <footer class="ftr">
   <div class="fgrid">
@@ -112,6 +112,6 @@ addEventListener('hashchange',sync);document.querySelectorAll('.ctabs a').forEac
   <div class="zya-line">Продаётся в Золотом Яблоке<a class="letu" href="https://www.letu.ru/brand/sandovich" target="_blank" rel="noopener">Также в Л’Этуаль</a></div>
   <p class="copy">© 2026 SANDÓVICH</p>
 </footer>
-<script src="app.js?v=202610151642"></script>
+<script src="app.js?v=202610151951"></script>
 </body>
 </html>

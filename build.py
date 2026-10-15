@@ -460,11 +460,11 @@ cat_body += f'''
 .gift-v .ln{{font-size:15px;line-height:22px;margin-top:14px;max-width:380px}}
 .gift-v .btn{{width:269px;margin-top:32px}}.gift-v .btn.btn-line{{margin-top:10px;color:#000;border:1px solid #000}}
 @media(max-width:999px){{.gift-v .in{{grid-template-columns:1fr;padding-top:32px}}.gift-v .ph{{height:auto;aspect-ratio:2/3}}.gift-v .tx{{padding:28px 0 0}}.gift-v .btn{{width:100%}}}}
-</style><div class="in"><div class="ph has-img"><video muted loop playsinline preload="none" poster="img/v/vending-poster.webp" aria-label="Девушка покупает коробку SANDÓVICH RUBY в уличном автомате"><source src="img/v/vending-480.webm" type="video/webm"><source src="img/v/vending-480.mp4" type="video/mp4"></video></div>
+</style><div class="in"><div class="ph has-img"><video muted loop playsinline webkit-playsinline preload="metadata" poster="img/v/vending-poster.webp" aria-label="Девушка покупает коробку SANDÓVICH RUBY в уличном автомате"><source src="img/v/vending-480.mp4" type="video/mp4"><source src="img/v/vending-480.webm" type="video/webm"></video></div>
 <div class="tx"><div class="k">В подарок</div><div class="w64">{GIFT_TITLE}</div><p class="ln">{GIFT_LINE}</p>
 <a class="btn btn-black zya" href="#">Купить в Золотом Яблоке</a><a class="btn btn-line" href="quiz.html">Подобрать цвет</a></div></div></section>
 <script>(function(){{var b=document.getElementById('gift-block'),v=b.querySelector('video'),calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function sync(){{var on=location.hash==='#gift';b.hidden=!on;if(on&&!calm){{v.play().catch(function(){{}})}}else{{v.pause()}}}}
+v.muted=true;v.playsInline=true;if(calm)v.controls=true;function sync(){{var on=location.hash==='#gift';b.hidden=!on;if(on&&!calm){{var p=v.play();if(p&&p.catch)p.catch(function(){{v.controls=true}})}}else{{v.pause()}}}}
 addEventListener('hashchange',sync);document.querySelectorAll('.ctabs a').forEach(function(a){{a.addEventListener('click',function(){{setTimeout(sync,0)}})}});sync();}})();</script>'''
 page('catalog.html', 'Расчёски SANDÓVICH · каталог', 'Все массажные расчёски SANDÓVICH: модели № 01 и № 02, пять цветов.', cat_body, 'brushes')
 print(ZYA_NOTE)
