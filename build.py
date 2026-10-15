@@ -448,6 +448,24 @@ cat_body = f'''<nav class="crumbs page"><a href="index.html">Главная</a><
   <div class="cbar"><span>Фильтр</span><span class="sort">Сортировка: <b>Рекомендуем</b></span><span class="cnt" id="cnt">6 расчёсок</span></div>
   <div class="cgrid" id="cgrid">{grid}</div>
 </section>'''
+# Блок «В подарок» с роликом (коробка RUBY из автомата, Seedance 2.5, 15.10). Виден только на вкладке #gift;
+# видео начинает грузиться только при открытии вкладки. Стили и логика внутри блока, style.css/app.js не трогаем.
+GIFT_TITLE = 'Она даже не&nbsp;удивилась'
+GIFT_LINE = 'Так выглядит подарок, который угадали: будто он всегда был её.'
+cat_body += f'''
+<section class="gift-v page" id="gift-block" hidden><style>
+.gift-v{{padding:0 var(--g) 96px}}.gift-v .in{{display:grid;grid-template-columns:459px 459px;gap:8px;justify-content:center;align-items:center;border-top:1px solid #000;padding-top:56px}}
+.gift-v .ph{{position:relative;height:689px;isolation:isolate}}.gift-v .ph video{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}}
+.gift-v .tx{{padding:0 0 0 56px}}.gift-v .k{{font-size:12px;line-height:16px;letter-spacing:2px;text-transform:uppercase;margin-bottom:18px}}
+.gift-v .ln{{font-size:15px;line-height:22px;margin-top:14px;max-width:380px}}
+.gift-v .btn{{width:269px;margin-top:32px}}.gift-v .btn.btn-line{{margin-top:10px;color:#000;border:1px solid #000}}
+@media(max-width:999px){{.gift-v .in{{grid-template-columns:1fr;padding-top:32px}}.gift-v .ph{{height:auto;aspect-ratio:2/3}}.gift-v .tx{{padding:28px 0 0}}.gift-v .btn{{width:100%}}}}
+</style><div class="in"><div class="ph has-img"><video muted loop playsinline preload="none" poster="img/v/vending-poster.webp" aria-label="Девушка покупает коробку SANDÓVICH RUBY в уличном автомате"><source src="img/v/vending-480.webm" type="video/webm"><source src="img/v/vending-480.mp4" type="video/mp4"></video></div>
+<div class="tx"><div class="k">В подарок</div><div class="w64">{GIFT_TITLE}</div><p class="ln">{GIFT_LINE}</p>
+<a class="btn btn-black zya" href="#">Купить в Золотом Яблоке</a><a class="btn btn-line" href="quiz.html">Подобрать цвет</a></div></div></section>
+<script>(function(){{var b=document.getElementById('gift-block'),v=b.querySelector('video'),calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function sync(){{var on=location.hash==='#gift';b.hidden=!on;if(on&&!calm){{v.play().catch(function(){{}})}}else{{v.pause()}}}}
+addEventListener('hashchange',sync);document.querySelectorAll('.ctabs a').forEach(function(a){{a.addEventListener('click',function(){{setTimeout(sync,0)}})}});sync();}})();</script>'''
 page('catalog.html', 'Расчёски SANDÓVICH · каталог', 'Все массажные расчёски SANDÓVICH: модели № 01 и № 02, пять цветов.', cat_body, 'brushes')
 print(ZYA_NOTE)
 
