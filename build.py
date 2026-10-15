@@ -117,7 +117,7 @@ def header(active=''):
     <li><a href="catalog.html#gift">В подарок</a></li>
     <li><details><summary>О бренде<span>+</span></summary><ul>{mega_links(ABOUT_LINKS)}</ul></details></li>
   </ul>
-  <a class="btn btn-black zya dr-buy" href="#">Купить в Золотом Яблоке</a>
+  <div class="buy2 dr-buy"><a class="btn btn-black zya" href="#">Золотое Яблоко</a><a class="btn btn-outline letu-b" href="{LETU}" target="_blank" rel="noopener">Л’Этуаль</a></div>
 </div>
 '''
 
@@ -346,7 +346,7 @@ def product(sku):
     <div class="ptitle"><div class="num"><i>№</i><b>{m}</b></div><h1>№ {m} Массажная расчёска {c}</h1></div>
     
     <div class="tiles">{tiles}</div>
-    <a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a>
+    <div class="buy2"><a class="btn btn-black zya" href="#" data-sku="{art}">Золотое Яблоко</a><a class="btn btn-outline letu-b" href="{LETU}" target="_blank" rel="noopener">Л’Этуаль</a></div>
     <p class="pnote">Артикул {art}</p>
     <div class="pdiag"><p><b>Сомневаетесь в цвете?</b></p><p>Подбор по цветотипу: пара вопросов о вас.</p><a class="btn btn-outline" href="quiz.html">Пройти подбор</a></div>
     <div class="paccs">{accs}</div>
@@ -358,7 +358,7 @@ def product(sku):
 </section>
 <section class="rsum page" id="reviews">
   <div class="rs-avg"><b>{str(rs["avg"]).replace(".", ",")}</b><div><span class="stars">★★★★★</span><p>{fmt_n(rs["n"])} {_word(rs["n"])}</p></div></div>
-  <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a></div>
+  <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a><a class="btn btn-black rs-letu" href="{LETU}" target="_blank" rel="noopener">Л’Этуаль</a></div>
 </section>
 <section class="rlist page">{''.join(f'<div class="ritem"><div class="rh"><b>{r["name"]}</b><span class="stars">★★★★★</span></div><p>{r["text"]}</p></div>' for r in REV["sku"][s]["reviews"])}</section>
 <section class="page" style="padding:60px var(--g) 92px">
