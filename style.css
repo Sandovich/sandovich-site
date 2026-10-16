@@ -462,3 +462,7 @@ button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
 .letu-b{border:1px solid #000;background:#fff;color:#000}
 .rs-cta{display:flex;gap:8px;flex-wrap:wrap}
 .rs-cta .rs-letu{background:#fff;color:#000;border:1px solid #000}
+/* Баннер на карточке № 02 Рубин (фото № 15, 16.10) */
+.ban-02r .ph.has-img>img{object-position:50% 30%}
+@media (min-width:750px){.ban-02r .ph.has-img>img{object-position:50% 46%}}
+.ban-line{font:400 16px/24px var(--futura);color:#fff;margin:6px 0 0;max-width:520px;text-shadow:0 1px 10px rgba(0,0,0,.45)}

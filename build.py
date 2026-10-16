@@ -314,6 +314,19 @@ page('index.html', 'SANDÓVICH · массажные расчёски, кото�
 
 
 # ---------- Карточка товара ----------
+BANNER_DEFAULT = '''<section class="s-full" style="padding-top:60px">
+  <div class="wrap"><div class="ph dark" data-ph="Фото 1440×576 · модель расчёсывает волосы, движение"></div>
+  <div class="ov"><div class="w64">Какая расчёска ваша?</div><a class="btn btn-line" href="quiz.html" style="margin-top:8px">Подобрать</a></div></div>
+</section>'''
+# Свой баннер на карточке: фото телефонной съёмки 08.2026 (№ 15, улучшено), текст Гермеса — тексты/баннер_02_ruby_гермес.md, 16.10
+BANNER = {
+    '02-ruby': '''<section class="s-full ban-02r" style="padding-top:60px">
+  <div class="wrap"><div class="ph dark has-img">''' + img('ban-02-ruby') + '''</div>
+  <div class="ov"><div class="w64">Спряталась.<br>Не вышло</div><p class="ban-line">Рубин закрыл ей один глаз и забрал себе все взгляды.</p><a class="btn btn-line" href="quiz.html" style="margin-top:14px">Подобрать свою</a></div></div>
+</section>''',
+}
+
+
 def product(sku):
     s, m, c, _, hexc, art, badge = next(p for p in PRODUCTS if p[0] == sku)
     md = MODEL[m]
@@ -352,10 +365,7 @@ def product(sku):
     <div class="paccs">{accs}</div>
   </div></aside>
 </section>
-<section class="s-full" style="padding-top:60px">
-  <div class="wrap"><div class="ph dark" data-ph="Фото 1440×576 · модель расчёсывает волосы, движение"></div>
-  <div class="ov"><div class="w64">Какая расчёска ваша?</div><a class="btn btn-line" href="quiz.html" style="margin-top:8px">Подобрать</a></div></div>
-</section>
+{BANNER.get(s, BANNER_DEFAULT)}
 <section class="rsum page" id="reviews">
   <div class="rs-avg"><b>{str(rs["avg"]).replace(".", ",")}</b><div><span class="stars">★★★★★</span><p>{fmt_n(rs["n"])} {_word(rs["n"])}</p></div></div>
   <div class="rs-cta"><a class="btn btn-black zya" href="#" data-sku="{art}">Купить в Золотом Яблоке</a><a class="btn btn-black rs-letu" href="{LETU}" target="_blank" rel="noopener">Л’Этуаль</a></div>
